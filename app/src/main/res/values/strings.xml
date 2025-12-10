@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">MessageApp</string>
+
+    <string name="msg_no_app_available_to_handle_the_url">No app available to open privacy policy URL</string>
+    <string name="permission_required">Permission Required</string>
+    <string name="permission_des">This permission is required for the app to function properly. Please enable it in the app settings.</string>
+    <string name="cancel">Cancel</string>
+    <string name="go_to_setting">Go to setting</string>
+
 </resources>

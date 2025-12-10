@@ -33,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        buildConfig = true
+        dataBinding = true
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -48,5 +54,6 @@ dependencies {
 
     implementation(libs.sdp.android)
     implementation(libs.ssp.android)
+    implementation(libs.lottie)
 
 }

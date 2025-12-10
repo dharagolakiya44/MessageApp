@@ -1,16 +1,36 @@
 package com.example.messageapp.activity
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.messageapp.R
+import com.example.messageapp.adapter.MessageAdapter
+import com.example.messageapp.databinding.ActivityMainBinding
+import com.example.messageapp.extention.viewBinding
+import com.example.messageapp.model.Message
 
 class MainActivity : AppCompatActivity() {
+    private val binding by viewBinding(ActivityMainBinding::inflate)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
+        setAdapter()
+
+    }
+
+    private fun setAdapter() {
+        binding.recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
+
+        val messages = listOf(
+            Message("Samsung Helpline", "Hhj", "05 Dec")
+        )
+
+        binding.recyclerView.adapter = MessageAdapter(messages)
+    }
+
+    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
     }
 }

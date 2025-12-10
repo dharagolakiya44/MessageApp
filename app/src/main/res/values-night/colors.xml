@@ -6,15 +6,15 @@
     <color name="colorWhiteCommon">#FFFFFFFF</color>
 
     <!--  Background colors-->
-    <color name="colorBgMain">#FFFFFF</color>
+    <color name="colorBgMain">#101010</color>
     <color name="colorBgPrimaryButtonCommon">@color/colorPrimary</color>
 
     <!--  Text colors-->
-    <color name="colorTextBlack">@color/colorBlackCommon</color>
+    <color name="colorTextBlack">@color/colorWhiteCommon</color>
     <color name="colorTextWhiteCommon">@color/colorWhiteCommon</color>
-    <color name="colorTextHint">#606478</color>
+    <color name="colorTextHint">#747A81</color>
 
-    <!--Border/Line colors-->
-    <color name="colorBorderGrey">#E7E9EF</color>
+    <!--Border/Line Colors-->
+    <color name="colorBorderGrey">#363636</color>
 
 </resources>
