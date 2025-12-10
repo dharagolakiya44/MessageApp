@@ -6,5 +6,6 @@
     <string name="permission_des">This permission is required for the app to function properly. Please enable it in the app settings.</string>
     <string name="cancel">Cancel</string>
     <string name="go_to_setting">Go to setting</string>
+    <string name="start_chat">START CHAT</string>
 
 </resources>

@@ -17,4 +17,7 @@
     <!--Border/Line colors-->
     <color name="colorBorderGrey">#E7E9EF</color>
 
+    <!--  Icon colors-->
+    <color name="colorIconBlack">#1A1A1A</color>
+
 </resources>

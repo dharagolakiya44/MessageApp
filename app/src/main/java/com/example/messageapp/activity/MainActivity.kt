@@ -29,8 +29,4 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = MessageAdapter(messages)
     }
 
-    override fun onCreateOptionsMenu(menu: android.view.Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return true
-    }
 }
