@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBgMain"
     android:orientation="vertical"
-    tools:context=".activity.SettingActivity">
+    tools:context=".ui.settings.SettingActivity">
 
     <include
         android:id="@+id/incToolbar"

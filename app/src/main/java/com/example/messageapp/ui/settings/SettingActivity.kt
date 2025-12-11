@@ -1,4 +1,4 @@
-package com.example.messageapp.activity
+package com.example.messageapp.ui.settings
 
 import android.content.ActivityNotFoundException
 import android.content.Intent

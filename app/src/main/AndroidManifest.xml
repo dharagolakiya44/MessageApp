@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MessageApp">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,14 +26,23 @@
             android:name=".activity.SelectThemeModeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SettingActivity"
+            android:name=".ui.settings.SettingActivity"
             android:exported="false" />
 
-        <activity android:name=".ui.archived.ArchivedActivity" />
-        <activity android:name=".ui.scheduled.ScheduledActivity" />
-        <activity android:name=".ui.blocked.BlockedActivity" />
-        <activity android:name=".ui.contacts.ContactSelectionActivity" />
-        <activity android:name=".ui.conversation.ConversationActivity" />
+        <activity android:name=".ui.archived.ArchivedActivity"
+            android:exported="false" />
+
+        <activity android:name=".ui.scheduled.ScheduledActivity"
+            android:exported="false" />
+
+        <activity android:name=".ui.blocked.BlockedActivity"
+            android:exported="false" />
+
+        <activity android:name=".ui.contacts.ContactSelectionActivity"
+            android:exported="false" />
+
+        <activity android:name=".ui.conversation.ConversationActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
