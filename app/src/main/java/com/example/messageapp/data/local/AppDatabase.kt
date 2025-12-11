@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [ContactEntity::class, ConversationEntity::class, MessageEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -40,7 +40,6 @@ abstract class AppDatabase : RoomDatabase() {
                     .build()
 
                 INSTANCE = instance
-                scope.launch { FakeDataSeeder.seed(instance) }
                 instance
             }
         }

@@ -1,6 +1,9 @@
 package com.example.messageapp.data.repository
 
+import android.content.Context
+import android.provider.ContactsContract
 import com.example.messageapp.data.local.AppDatabase
+import com.example.messageapp.data.local.entity.ContactEntity
 import com.example.messageapp.data.local.entity.ConversationEntity
 import com.example.messageapp.data.local.entity.MessageEntity
 import com.example.messageapp.data.mapper.toDomain
@@ -140,6 +143,48 @@ class MessagingRepositoryImpl(
         )
         conversationDao.upsert(conversation)
         newId
+    }
+
+    override suspend fun syncDeviceContacts(context: Context) = withContext(ioDispatcher) {
+        val contentResolver = context.contentResolver
+        val cursor = contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
+            null,
+            null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
+
+        val newContacts = mutableListOf<ContactEntity>()
+        cursor?.use {
+            val idIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+            val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
+            while (it.moveToNext()) {
+                val id = it.getLong(idIndex)
+                val name = it.getString(nameIndex) ?: "Unknown"
+                val phone = it.getString(numberIndex) ?: ""
+                
+                // Simple de-duplication or validation could go here
+                newContacts.add(
+                    ContactEntity(
+                        id = id,
+                        name = name,
+                        phone = phone,
+                        isOnline = false // Default status
+                    )
+                )
+            }
+        }
+        
+        if (newContacts.isNotEmpty()) {
+            contactDao.insertAll(newContacts)
+        }
     }
 
     private fun simulateNetworkSend(message: MessageEntity) {

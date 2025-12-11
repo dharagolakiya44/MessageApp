@@ -1,4 +1,4 @@
-package com.example.messageapp.activity
+package com.example.messageapp.ui.common
 
 import android.Manifest
 import android.app.Activity
@@ -32,6 +32,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.messageapp.R
 import com.example.messageapp.data.PreferenceHelper
+import com.example.messageapp.ui.onboarding.ActivityManageSystemAlert
+import com.example.messageapp.ui.home.MainActivity
 import com.example.messageapp.utils.BetterActivityResult
 import com.example.messageapp.utils.LocaleHelper
 import com.example.messageapp.utils.isTiramisuPlusNew
@@ -55,7 +57,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
-        activityLauncher = BetterActivityResult.registerActivityForResult(this)
+        activityLauncher = BetterActivityResult.Companion.registerActivityForResult(this)
         setupStatusBar()
 
         applySystemBarInsets(R.color.colorBgMain, !isNightModeActive())

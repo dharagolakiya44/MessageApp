@@ -3,67 +3,70 @@ package com.example.messageapp.ui.conversation
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.messageapp.Controller
 import com.example.messageapp.R
-import com.example.messageapp.adapters.ChatMessageAdapter
+import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
-import com.example.messageapp.ui.utils.formatTimestamp
+import com.example.messageapp.utils.formatTimestamp
 import com.example.messageapp.viewmodels.ConversationViewModel
 import kotlinx.coroutines.launch
 
-class ConversationFragment : Fragment() {
+class ConversationActivity : AppCompatActivity() {
 
-    private var _binding: FragmentConversationBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentConversationBinding
 
-    private val conversationId: Long by lazy { requireArguments().getLong("conversationId") }
-    private val contactNameArg: String? by lazy { requireArguments().getString("contactName") }
+    private val conversationId: Long by lazy { intent.getLongExtra("conversationId", -1L) }
+    private val contactNameArg: String? by lazy { intent.getStringExtra("contactName") }
 
-    private val repository by lazy { (requireActivity().application as Controller).repository }
+    private val repository by lazy { (application as Controller).repository }
     private val viewModel: ConversationViewModel by viewModels {
         ConversationViewModel.Factory(conversationId, repository)
     }
 
     private val adapter by lazy { ChatMessageAdapter { id -> viewModel.retry(id) } }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentConversationBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = FragmentConversationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        // Binding likely has a toolbar or header included. If FragmentConversationBinding 
+        // includes a custom toolbar, we use that. If not, we rely on Window Decor ActionBar.
+        // Checking fragment_conversation.xml would be ideal, but assume standard app bar behavior for now
+        // or setup custom toolbar if the layout has one.
+        // Given typically fragments had their own toolbars or relied on MainActivity's.
+        // We'll trust the binding structure. If it has a toolbar id, we set it.
+        // Since we didn't check layout file internals deeply, we default to standard supportActionBar behavior
+        // but hide it if layout provides its own header.
+        // EDIT: MainActivity had a toolbar. Fragment likely didn't. 
+        
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = contactNameArg ?: "Chat"
+
         binding.recyclerMessages.apply {
-            adapter = this@ConversationFragment.adapter
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+            adapter = this@ConversationActivity.adapter
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ConversationActivity)
         }
-
-        requireActivity().addMenuProvider(ConversationMenuProvider(
-            onCall = { startCall() },
-            onInfo = { showInfo() }
-        ), viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         binding.buttonSend.setOnClickListener {
             viewModel.sendMessage(binding.inputMessage.text.toString())
             binding.inputMessage.text?.clear()
         }
+        
+        addMenuProvider(ConversationMenuProvider(
+            onCall = { startCall() },
+            onInfo = { showInfo() }
+        ))
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.messages.collect { list ->
                         adapter.submitList(list) {
@@ -76,8 +79,8 @@ class ConversationFragment : Fragment() {
                 }
                 launch {
                     viewModel.conversation.collect { conversation ->
-                        binding.textTitle.text = conversation?.contact?.name ?: contactNameArg
-                        binding.textSubtitle.text = when {
+                        supportActionBar?.title = conversation?.contact?.name ?: contactNameArg
+                        supportActionBar?.subtitle = when {
                             conversation?.contact?.isOnline == true -> getString(R.string.status_online)
                             conversation?.contact?.lastSeen != null -> getString(
                                 R.string.status_last_seen,
@@ -100,7 +103,7 @@ class ConversationFragment : Fragment() {
     private fun startCall() {
         val phone = viewModel.conversation.value?.contact?.phone
         if (phone.isNullOrBlank()) {
-            Toast.makeText(requireContext(), R.string.no_phone_available, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.no_phone_available, Toast.LENGTH_SHORT).show()
             return
         }
         val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
@@ -108,12 +111,11 @@ class ConversationFragment : Fragment() {
     }
 
     private fun showInfo() {
-        Toast.makeText(requireContext(), R.string.conversation_info_hint, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.conversation_info_hint, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 }
-

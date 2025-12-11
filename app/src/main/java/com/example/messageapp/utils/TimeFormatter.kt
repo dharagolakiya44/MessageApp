@@ -1,4 +1,4 @@
-package com.example.messageapp.ui.utils
+package com.example.messageapp.utils
 
 import java.text.SimpleDateFormat
 import java.util.Date

@@ -1,5 +1,6 @@
 package com.example.messageapp.domain.repository
 
+import android.content.Context
 import com.example.messageapp.domain.model.ChatMessage
 import com.example.messageapp.domain.model.Contact
 import com.example.messageapp.domain.model.Conversation
@@ -19,5 +20,6 @@ interface MessagingRepository {
     suspend fun markAllAsRead()
     suspend fun markConversationRead(conversationId: Long)
     suspend fun getOrCreateConversation(contactId: Long): Long
+    suspend fun syncDeviceContacts(context: Context)
 }
 
