@@ -16,6 +16,11 @@ import com.example.messageapp.viewmodels.ContactSelectionViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+
 class ContactSelectionFragment : Fragment() {
 
     private var _binding: FragmentContactSelectionBinding? = null
@@ -24,6 +29,15 @@ class ContactSelectionFragment : Fragment() {
     private val repository by lazy { (requireActivity().application as Controller).repository }
     private val viewModel: ContactSelectionViewModel by viewModels {
         ContactSelectionViewModel.Factory(repository)
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            viewModel.syncContacts(requireContext())
+        }
+        // Ideally show explanation if denied, but keeping it simple for now
     }
 
     private val adapter by lazy {
@@ -48,6 +62,8 @@ class ContactSelectionFragment : Fragment() {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         }
 
+        checkPermissionAndSync()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.contacts.collectLatest { contacts ->
                 adapter.submitList(contacts)
@@ -64,6 +80,18 @@ class ContactSelectionFragment : Fragment() {
                     viewModel.resetNavigation()
                 }
             }
+        }
+    }
+
+    private fun checkPermissionAndSync() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_CONTACTS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            viewModel.syncContacts(requireContext())
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
     }
 
