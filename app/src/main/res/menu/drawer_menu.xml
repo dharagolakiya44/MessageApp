@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/menu_messages" />
+    <item
+        android:id="@+id/archivedFragment"
+        android:icon="@drawable/ic_archive"
+        android:title="@string/menu_archived" />
+    <item
+        android:id="@+id/scheduledFragment"
+        android:icon="@drawable/ic_send"
+        android:title="@string/menu_scheduled" />
+    <item
+        android:id="@+id/blockedFragment"
+        android:icon="@drawable/ic_error"
+        android:title="@string/menu_blocked" />
+    <item
+        android:id="@+id/menu_mark_read"
+        android:icon="@drawable/ic_info"
+        android:title="@string/menu_mark_all_read" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/menu_settings" />
+</menu>
+

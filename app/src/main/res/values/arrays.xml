@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="languages">
+        <item>System default</item>
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+    </string-array>
+    <string-array name="languages_values">
+        <item>system</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+    </string-array>
+
+    <string-array name="theme_modes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>System Default</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>light</item>
+        <item>dark</item>
+        <item>system</item>
+    </string-array>
+
+    <string-array name="font_sizes">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+    </string-array>
+    <string-array name="font_values">
+        <item>small</item>
+        <item>normal</item>
+        <item>large</item>
+        <item>xlarge</item>
+    </string-array>
+
+    <string-array name="swipe_actions">
+        <item>Archive</item>
+        <item>Delete</item>
+        <item>Mute</item>
+        <item>None</item>
+    </string-array>
+    <string-array name="swipe_values">
+        <item>archive</item>
+        <item>delete</item>
+        <item>mute</item>
+        <item>none</item>
+    </string-array>
+</resources>
+

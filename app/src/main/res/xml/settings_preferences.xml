@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_language_category">
+        <ListPreference
+            android:key="language"
+            android:title="@string/pref_language"
+            android:entries="@array/languages"
+            android:entryValues="@array/languages_values"
+            android:defaultValue="system" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_theme_category">
+        <ListPreference
+            android:key="theme_mode"
+            android:title="@string/pref_theme"
+            android:entries="@array/theme_modes"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="system" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_font_category">
+        <ListPreference
+            android:key="font_size"
+            android:title="@string/pref_font_size"
+            android:entries="@array/font_sizes"
+            android:entryValues="@array/font_values"
+            android:defaultValue="normal" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_swipe_category">
+        <ListPreference
+            android:key="swipe_action"
+            android:title="@string/pref_swipe"
+            android:entries="@array/swipe_actions"
+            android:entryValues="@array/swipe_values"
+            android:defaultValue="archive" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_after_call_category">
+        <SwitchPreferenceCompat
+            android:key="after_call_feature"
+            android:title="@string/pref_after_call"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_support_category">
+        <Preference
+            android:key="rate_app"
+            android:title="@string/pref_rate_app" />
+        <Preference
+            android:key="share_app"
+            android:title="@string/pref_share_app" />
+        <Preference
+            android:key="privacy_policy"
+            android:title="@string/pref_privacy_policy" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
+
