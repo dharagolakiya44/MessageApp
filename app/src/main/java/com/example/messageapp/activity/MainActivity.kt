@@ -1,71 +1,94 @@
 package com.example.messageapp.activity
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.onNavDestinationSelected
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.messageapp.Controller
 import com.example.messageapp.R
+import com.example.messageapp.adapters.ConversationAdapter
 import com.example.messageapp.databinding.ActivityMainBinding
 import com.example.messageapp.extention.viewBinding
+import com.example.messageapp.ui.archived.ArchivedActivity
+import com.example.messageapp.ui.blocked.BlockedActivity
+import com.example.messageapp.ui.common.SwipeToArchiveCallback
+import com.example.messageapp.ui.contacts.ContactSelectionActivity
+import com.example.messageapp.ui.conversation.ConversationActivity
+import com.example.messageapp.ui.scheduled.ScheduledActivity
+import com.example.messageapp.viewmodels.HomeViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMainBinding::inflate)
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    
+    private val repository by lazy { (application as Controller).repository }
+    private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory(repository) }
+
+    private val conversationAdapter by lazy {
+        ConversationAdapter { conversation ->
+            val intent = Intent(this, ConversationActivity::class.java).apply {
+                putExtra("conversationId", conversation.id)
+                putExtra("contactName", conversation.contact.name)
+            }
+            startActivity(intent)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.homeFragment,
-                R.id.archivedFragment,
-                R.id.scheduledFragment,
-                R.id.blockedFragment,
-                R.id.settingsFragment
-            ),
-            binding.drawerLayout
-        )
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
-        NavigationUI.setupWithNavController(binding.navView, navController)
+        setupDrawer()
+        setupHomeUi()
+    }
+
+    private fun setupDrawer() {
+        binding.toolbar.setNavigationIcon(R.drawable.ic_menu) // Assuming ic_menu exists or using default drawer icon
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
+
         binding.navView.setNavigationItemSelectedListener { menuItem ->
+            binding.drawerLayout.closeDrawers()
             when (menuItem.itemId) {
-                R.id.menu_mark_read -> {
-                    lifecycleScope.launch { (application as Controller).repository.markAllAsRead() }
-                    binding.drawerLayout.closeDrawers()
-                    true
-                }
-                else -> {
-                    val handled = menuItem.onNavDestinationSelected(navController)
-                    if (handled) binding.drawerLayout.closeDrawers()
-                    handled
-                }
+                R.id.archivedFragment -> startActivity(Intent(this, ArchivedActivity::class.java))
+                R.id.scheduledFragment -> startActivity(Intent(this, ScheduledActivity::class.java))
+                R.id.blockedFragment -> startActivity(Intent(this, BlockedActivity::class.java))
+                R.id.menu_mark_read -> viewModel.markAllRead()
+                // Settings is ignored as requested
             }
-        }
-
-        binding.fabStartChat.setOnClickListener {
-            navController.navigate(R.id.contactSelectionFragment)
-        }
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            binding.fabStartChat.isVisible = destination.id == R.id.homeFragment
+            true // Close drawer on selection
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    private fun setupHomeUi() {
+        binding.recyclerConversations.apply {
+            adapter = conversationAdapter
+            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@MainActivity)
+        }
+        
+        ItemTouchHelper(
+            SwipeToArchiveCallback(this) { position ->
+                val conversation = conversationAdapter.getItemAt(position)
+                viewModel.archiveConversation(conversation.id)
+            }
+        ).attachToRecyclerView(binding.recyclerConversations)
+
+        binding.fabStartChat.setOnClickListener {
+            startActivity(Intent(this, ContactSelectionActivity::class.java))
+        }
+
+        lifecycleScope.launch {
+            viewModel.conversations.collectLatest { list ->
+                conversationAdapter.submitList(list)
+                binding.viewEmpty.isVisible = list.isEmpty()
+            }
+        }
     }
 }

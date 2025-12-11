@@ -18,10 +18,14 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.archived.ArchivedActivity" />
+        <activity android:name=".ui.scheduled.ScheduledActivity" />
+        <activity android:name=".ui.blocked.BlockedActivity" />
+        <activity android:name=".ui.contacts.ContactSelectionActivity" />
+        <activity android:name=".ui.conversation.ConversationActivity" />
     </application>
 
 </manifest>
