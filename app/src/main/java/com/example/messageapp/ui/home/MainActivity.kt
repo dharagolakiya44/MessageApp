@@ -1,4 +1,4 @@
-package com.example.messageapp.activity
+package com.example.messageapp.ui.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,11 +8,12 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.messageapp.Controller
 import com.example.messageapp.R
-import com.example.messageapp.adapters.ConversationAdapter
 import com.example.messageapp.databinding.ActivityMainBinding
 import com.example.messageapp.extention.viewBinding
+import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.ui.archived.ArchivedActivity
 import com.example.messageapp.ui.blocked.BlockedActivity
 import com.example.messageapp.ui.common.SwipeToArchiveCallback
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMainBinding::inflate)
-    
+
     private val repository by lazy { (application as Controller).repository }
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory(repository) }
 
@@ -70,9 +71,9 @@ class MainActivity : AppCompatActivity() {
     private fun setupHomeUi() {
         binding.recyclerConversations.apply {
             adapter = conversationAdapter
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@MainActivity)
+            layoutManager = LinearLayoutManager(this@MainActivity)
         }
-        
+
         ItemTouchHelper(
             SwipeToArchiveCallback(this) { position ->
                 val conversation = conversationAdapter.getItemAt(position)

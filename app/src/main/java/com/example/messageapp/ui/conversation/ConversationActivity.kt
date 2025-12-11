@@ -12,9 +12,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.messageapp.Controller
 import com.example.messageapp.R
-import com.example.messageapp.adapters.ChatMessageAdapter
+import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
-import com.example.messageapp.ui.utils.formatTimestamp
+import com.example.messageapp.utils.formatTimestamp
 import com.example.messageapp.viewmodels.ConversationViewModel
 import kotlinx.coroutines.launch
 

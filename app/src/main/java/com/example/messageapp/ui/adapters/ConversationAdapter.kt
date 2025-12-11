@@ -1,4 +1,4 @@
-package com.example.messageapp.adapters
+package com.example.messageapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.messageapp.databinding.ItemConversationBinding
 import com.example.messageapp.domain.model.Conversation
-import com.example.messageapp.ui.utils.formatTimestamp
+import com.example.messageapp.utils.formatTimestamp
 
 class ConversationAdapter(
     private val onConversationClick: (Conversation) -> Unit

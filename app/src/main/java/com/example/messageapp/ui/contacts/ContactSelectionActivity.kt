@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.messageapp.Controller
-import com.example.messageapp.adapters.ContactAdapter
+import com.example.messageapp.ui.adapters.ContactAdapter
 import com.example.messageapp.databinding.FragmentContactSelectionBinding
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.viewmodels.ContactSelectionViewModel

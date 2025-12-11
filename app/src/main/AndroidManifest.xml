@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MessageApp">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

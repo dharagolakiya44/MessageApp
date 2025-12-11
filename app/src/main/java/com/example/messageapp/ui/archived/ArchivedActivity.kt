@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.messageapp.Controller
-import com.example.messageapp.adapters.ConversationAdapter
+import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.databinding.FragmentArchivedBinding
 import com.example.messageapp.ui.common.SwipeToArchiveCallback
 import com.example.messageapp.ui.conversation.ConversationActivity

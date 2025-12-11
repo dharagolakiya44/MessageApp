@@ -1,4 +1,4 @@
-package com.example.messageapp.adapters
+package com.example.messageapp.ui.adapters
 
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.example.messageapp.R
 import com.example.messageapp.databinding.ItemChatMessageBinding
 import com.example.messageapp.domain.model.ChatMessage
 import com.example.messageapp.domain.model.MessageStatus
-import com.example.messageapp.ui.utils.formatTimestamp
+import com.example.messageapp.utils.formatTimestamp
 
 class ChatMessageAdapter(
     private val onRetry: (Long) -> Unit

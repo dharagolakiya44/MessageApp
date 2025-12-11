@@ -1,6 +1,5 @@
-package com.example.messageapp.activity
+package com.example.messageapp.ui.onboarding
 
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler

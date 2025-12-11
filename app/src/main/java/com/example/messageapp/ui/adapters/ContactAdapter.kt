@@ -1,4 +1,4 @@
-package com.example.messageapp.adapters
+package com.example.messageapp.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
