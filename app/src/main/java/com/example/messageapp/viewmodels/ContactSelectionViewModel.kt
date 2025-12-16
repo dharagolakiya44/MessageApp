@@ -16,9 +16,25 @@ class ContactSelectionViewModel(
     private val repository: MessagingRepository
 ) : ViewModel() {
 
-    val contacts: StateFlow<List<Contact>> =
-        repository.observeContacts()
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    private val _searchQuery = MutableStateFlow("")
+
+    val contacts: StateFlow<List<Contact>> = kotlinx.coroutines.flow.combine(
+        repository.observeContacts(),
+        _searchQuery
+    ) { contacts, query ->
+        if (query.isBlank()) {
+            contacts
+        } else {
+            contacts.filter { contact ->
+                contact.name.contains(query, ignoreCase = true) ||
+                        contact.phone.contains(query, ignoreCase = true)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun onSearchQueryChanged(query: String) {
+        _searchQuery.value = query
+    }
 
     private val _createdConversationId = MutableStateFlow<Long?>(null)
     val createdConversationId: StateFlow<Long?> = _createdConversationId

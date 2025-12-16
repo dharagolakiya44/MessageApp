@@ -19,7 +19,7 @@ fun ConversationEntity.toDomain(contact: Contact = Contact(contactId, contactNam
     Conversation(
         id = id,
         contact = contact,
-        lastMessage = lastMessage,
+        lastMessage = if (lastMessage == "Say hello 👋") "" else lastMessage,
         lastTimestamp = lastTimestamp,
         unreadCount = unreadCount,
         isArchived = archived,

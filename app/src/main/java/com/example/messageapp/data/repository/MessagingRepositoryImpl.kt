@@ -40,7 +40,7 @@ class MessagingRepositoryImpl(
                 val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
                     ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
                 conversation.toDomain(contact)
-            }
+            }.filter { it.lastMessage.isNotBlank() }
         }
 
     override fun observeArchivedConversations(): Flow<List<Conversation>> =
@@ -49,7 +49,7 @@ class MessagingRepositoryImpl(
                 val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
                     ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
                 conversation.toDomain(contact)
-            }
+            }.filter { it.lastMessage.isNotBlank() }
         }
 
     override fun observeConversation(conversationId: Long): Flow<Conversation?> =
@@ -134,7 +134,7 @@ class MessagingRepositoryImpl(
             contactName = contact.name,
             contactPhone = contact.phone,
             contactOnline = contact.isOnline,
-            lastMessage = "Say hello 👋",
+            lastMessage = "",
             lastTimestamp = System.currentTimeMillis(),
             unreadCount = 0,
             archived = false,
