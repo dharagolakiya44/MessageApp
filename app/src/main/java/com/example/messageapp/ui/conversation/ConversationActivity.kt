@@ -14,11 +14,12 @@ import com.example.messageapp.Controller
 import com.example.messageapp.R
 import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
+import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.utils.formatTimestamp
 import com.example.messageapp.viewmodels.ConversationViewModel
 import kotlinx.coroutines.launch
 
-class ConversationActivity : AppCompatActivity() {
+class ConversationActivity : BaseActivity() {
 
     private lateinit var binding: FragmentConversationBinding
 
@@ -81,12 +82,12 @@ class ConversationActivity : AppCompatActivity() {
                     viewModel.conversation.collect { conversation ->
                         supportActionBar?.title = conversation?.contact?.name ?: contactNameArg
                         supportActionBar?.subtitle = when {
-                            conversation?.contact?.isOnline == true -> getString(R.string.status_online)
+                            conversation?.contact?.isOnline == true -> getString(R.string.online)
                             conversation?.contact?.lastSeen != null -> getString(
-                                R.string.status_last_seen,
+                                R.string.last_seen,
                                 formatTimestamp(conversation.contact.lastSeen)
                             )
-                            else -> getString(R.string.status_offline)
+                            else -> getString(R.string.offline)
                         }
                     }
                 }
@@ -103,7 +104,7 @@ class ConversationActivity : AppCompatActivity() {
     private fun startCall() {
         val phone = viewModel.conversation.value?.contact?.phone
         if (phone.isNullOrBlank()) {
-            Toast.makeText(this, R.string.no_phone_available, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.no_phone_number_available, Toast.LENGTH_SHORT).show()
             return
         }
         val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
@@ -111,7 +112,7 @@ class ConversationActivity : AppCompatActivity() {
     }
 
     private fun showInfo() {
-        Toast.makeText(this, R.string.conversation_info_hint, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/pref_language_category">
+    <PreferenceCategory android:title="@string/language">
         <ListPreference
             android:key="language"
-            android:title="@string/pref_language"
+            android:title="@string/app_language"
             android:entries="@array/languages"
             android:entryValues="@array/languages_values"
             android:defaultValue="system" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_theme_category">
+    <PreferenceCategory android:title="@string/theme_mode">
         <ListPreference
             android:key="theme_mode"
-            android:title="@string/pref_theme"
+            android:title="@string/theme"
             android:entries="@array/theme_modes"
             android:entryValues="@array/theme_values"
             android:defaultValue="system" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_font_category">
+    <PreferenceCategory android:title="@string/font_size">
         <ListPreference
             android:key="font_size"
-            android:title="@string/pref_font_size"
+            android:title="@string/text_size"
             android:entries="@array/font_sizes"
             android:entryValues="@array/font_values"
             android:defaultValue="normal" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_swipe_category">
+    <PreferenceCategory android:title="@string/swipe_actions">
         <ListPreference
             android:key="swipe_action"
-            android:title="@string/pref_swipe"
+            android:title="@string/swipe_behaviour"
             android:entries="@array/swipe_actions"
             android:entryValues="@array/swipe_values"
             android:defaultValue="archive" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_after_call_category">
+    <PreferenceCategory android:title="@string/after_call_feature">
         <SwitchPreferenceCompat
             android:key="after_call_feature"
-            android:title="@string/pref_after_call"
+            android:title="@string/show_post_call_actions"
             android:defaultValue="true" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_support_category">
+    <PreferenceCategory android:title="@string/support">
         <Preference
             android:key="rate_app"
-            android:title="@string/pref_rate_app" />
+            android:title="@string/rate_app" />
         <Preference
             android:key="share_app"
-            android:title="@string/pref_share_app" />
+            android:title="@string/share_app" />
         <Preference
             android:key="privacy_policy"
-            android:title="@string/pref_privacy_policy" />
+            android:title="@string/privacy_policy" />
     </PreferenceCategory>
 
 </PreferenceScreen>

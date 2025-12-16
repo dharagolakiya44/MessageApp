@@ -3,8 +3,9 @@ package com.example.messageapp.ui.blocked
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.messageapp.databinding.FragmentPlaceholderBinding
+import com.example.messageapp.ui.common.BaseActivity
 
-class BlockedActivity : AppCompatActivity() {
+class BlockedActivity : BaseActivity() {
 
     private lateinit var binding: FragmentPlaceholderBinding
 

@@ -11,12 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/white" />
+        <include layout="@layout/include_main_toolbar"
+            android:id="@+id/incToolbar"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_conversations"
@@ -32,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/no_messages"
+            android:text="@string/no_messages_yet_start_a_chat"
             android:textSize="18sp"
             android:visibility="gone" />
 

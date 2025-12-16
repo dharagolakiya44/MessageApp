@@ -61,7 +61,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_marginStart="8dp"
-                    android:contentDescription="@string/error_indicator"
+                    android:contentDescription="@string/message_failed"
                     android:src="@drawable/ic_error"
                     android:visibility="gone"
                     tools:visibility="visible" />

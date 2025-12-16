@@ -3,8 +3,9 @@ package com.example.messageapp.ui.scheduled
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.messageapp.databinding.FragmentPlaceholderBinding
+import com.example.messageapp.ui.common.BaseActivity
 
-class ScheduledActivity : AppCompatActivity() {
+class ScheduledActivity : BaseActivity() {
 
     private lateinit var binding: FragmentPlaceholderBinding
 

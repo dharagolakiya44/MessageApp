@@ -46,7 +46,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun shareApp() {
         val sendIntent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_text))
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.check_out_this_messaging_app))
         }
         startActivity(Intent.createChooser(sendIntent, null))
     }

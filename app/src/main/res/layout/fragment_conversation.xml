@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="16dp"
-        android:text="@string/no_messages"
+        android:text="@string/no_messages_yet_start_a_chat"
         android:textSize="@dimen/text_body"
         android:visibility="gone" />
 
@@ -67,7 +67,7 @@
                 android:id="@+id/input_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_type_message" />
+                android:hint="@string/type_a_message" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton

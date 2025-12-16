@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="24dp"
-        android:text="@string/no_messages"
+        android:text="@string/no_messages_yet_start_a_chat"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textSize="@dimen/text_body"
         android:visibility="gone"

@@ -21,4 +21,5 @@
     <color name="colorIconBlack">#1A1A1A</color>
 
     <color name="colorIconBg">#EBF5FF</color>
+    <color name="colorBgSearch">#F2F2F2</color>
 </resources>

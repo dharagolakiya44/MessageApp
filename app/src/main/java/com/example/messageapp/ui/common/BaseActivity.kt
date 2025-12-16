@@ -133,7 +133,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse("https://nexios.in/alarm/privacy-policy"))
             startActivity(browserIntent)
         } catch (e: ActivityNotFoundException) {
-            showToast(getString(R.string.msg_no_app_available_to_handle_the_url))
+            showToast(getString(R.string.no_app_available_to_open_privacy_policy_url))
         }
     }
 
@@ -230,7 +230,7 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showSettingsDialog(context: Context) {
         AlertDialog.Builder(context)
             .setTitle(getString(R.string.permission_required))
-            .setMessage(getString(R.string.permission_des))
+            .setMessage(getString(R.string.this_permission_is_required_for_the_app_to_function_properly_please_enable_it_in_the_app_settings))
             .setCancelable(false)
             .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 onSettingsPermissionCancel()
