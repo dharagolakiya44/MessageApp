@@ -37,19 +37,11 @@ class ConversationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = FragmentConversationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Binding likely has a toolbar or header included. If FragmentConversationBinding 
-        // includes a custom toolbar, we use that. If not, we rely on Window Decor ActionBar.
-        // Checking fragment_conversation.xml would be ideal, but assume standard app bar behavior for now
-        // or setup custom toolbar if the layout has one.
-        // Given typically fragments had their own toolbars or relied on MainActivity's.
-        // We'll trust the binding structure. If it has a toolbar id, we set it.
-        // Since we didn't check layout file internals deeply, we default to standard supportActionBar behavior
-        // but hide it if layout provides its own header.
-        // EDIT: MainActivity had a toolbar. Fragment likely didn't. 
         
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = contactNameArg ?: "Chat"
+        // Hide system action bar if present, since we use custom toolbar layout
+        supportActionBar?.hide()
+
+        setupCustomToolbar()
 
         binding.recyclerMessages.apply {
             adapter = this@ConversationActivity.adapter
@@ -61,6 +53,10 @@ class ConversationActivity : BaseActivity() {
             binding.inputMessage.text?.clear()
         }
         
+        binding.buttonAdd?.setOnClickListener {
+             // Placeholder for future functionality
+        }
+        
         addMenuProvider(ConversationMenuProvider(
             onCall = { startCall() },
             onInfo = { showInfo() }
@@ -69,7 +65,7 @@ class ConversationActivity : BaseActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.messages.collect { list ->
+                    viewModel.uiList.collect { list ->
                         adapter.submitList(list) {
                             if (list.isNotEmpty()) {
                                 binding.recyclerMessages.scrollToPosition(list.lastIndex)
@@ -80,8 +76,11 @@ class ConversationActivity : BaseActivity() {
                 }
                 launch {
                     viewModel.conversation.collect { conversation ->
-                        supportActionBar?.title = conversation?.contact?.name ?: contactNameArg
-                        supportActionBar?.subtitle = when {
+                        val name = conversation?.contact?.name ?: contactNameArg
+                        binding.textTitle.text = name
+                        
+                        binding.textSubtitle.isVisible = true
+                        binding.textSubtitle.text = when {
                             conversation?.contact?.isOnline == true -> getString(R.string.online)
                             conversation?.contact?.lastSeen != null -> getString(
                                 R.string.last_seen,
@@ -99,6 +98,20 @@ class ConversationActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun setupCustomToolbar() {
+        binding.buttonBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        binding.buttonCall.setOnClickListener {
+            startCall()
+        }
+        binding.buttonInfo.setOnClickListener {
+            showInfo()
+        }
+        
+        binding.textTitle.text = contactNameArg ?: "Chat"
     }
 
     private fun startCall() {
