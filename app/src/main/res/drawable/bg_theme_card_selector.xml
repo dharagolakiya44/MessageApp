@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected/Checked State -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="12dp" />
+            <stroke android:width="2dp" android:color="#0685ED" />
+        </shape>
+    </item>
+    <item android:state_checked="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="12dp" />
+            <stroke android:width="2dp" android:color="#0685ED" />
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+             <solid android:color="@android:color/transparent" />
+            <corners android:radius="12dp" />
+            <stroke android:width="2dp" android:color="#0685ED" />
+        </shape>
+    </item>
+
+    <!-- Default State -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="12dp" />
+            <!-- No stroke or very faint stroke if desired, but image has its own border usually. 
+                 Or maybe just transparent. -->
+        </shape>
+    </item>
+</selector>

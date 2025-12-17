@@ -9,6 +9,8 @@ import com.example.messageapp.R
 import com.example.messageapp.databinding.ActivitySettingBinding
 import com.example.messageapp.extention.viewBinding
 import com.example.messageapp.ui.common.BaseActivity
+import com.example.messageapp.ui.theme.SelectThemeModeActivity
+import kotlin.jvm.java
 
 class SettingActivity : BaseActivity() {
     private val binding by viewBinding(ActivitySettingBinding::inflate)
@@ -43,7 +45,8 @@ class SettingActivity : BaseActivity() {
         }
 
         binding.llTheme.setOnClickListener {
-
+            val intent = Intent(this, SelectThemeModeActivity::class.java)
+            startActivity(intent)
         }
 
         binding.llSwipe.setOnClickListener {
