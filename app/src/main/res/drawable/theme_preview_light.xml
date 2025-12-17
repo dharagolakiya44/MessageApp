@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Window Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="8dp" />
+            <stroke android:width="1dp" android:color="#E0E0E0" />
+        </shape>
+    </item>
+
+    <!-- Header Bar -->
+    <item android:top="10dp" android:left="10dp" android:right="10dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F5" />
+            <corners android:radius="4dp" />
+            <size android:height="12dp" />
+        </shape>
+    </item>
+
+    <!-- Content Row 1 (Circles) -->
+    <item android:top="30dp" android:left="14dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+    <item android:top="30dp" android:left="30dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+    <item android:top="30dp" android:left="46dp">
+        <shape android:shape="oval">
+            <solid android:color="#0685ED" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+     <item android:top="30dp" android:left="62dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+
+    <!-- Content Row 2 (Circles) -->
+    <item android:top="44dp" android:left="14dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+     <item android:top="44dp" android:left="30dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+     <item android:top="44dp" android:left="46dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+     <item android:top="44dp" android:left="62dp">
+        <shape android:shape="oval">
+            <solid android:color="#F5F5F5" />
+            <size android:width="8dp" android:height="8dp" />
+        </shape>
+    </item>
+
+    <!-- Button at bottom right -->
+    <item android:gravity="bottom|right" android:bottom="8dp" android:right="8dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#0685ED" />
+            <corners android:radius="6dp" />
+            <size android:width="30dp" android:height="10dp" />
+        </shape>
+    </item>
+</layer-list>
