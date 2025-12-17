@@ -4,12 +4,12 @@
     <item
         android:id="@+id/menu_call"
         android:icon="@drawable/ic_call"
-        android:title="@string/menu_call"
+        android:title="@string/call"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_info"
         android:icon="@drawable/ic_info"
-        android:title="@string/menu_info"
+        android:title="@string/info"
         app:showAsAction="ifRoom" />
 </menu>
 

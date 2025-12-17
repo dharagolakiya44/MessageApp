@@ -16,6 +16,7 @@ import com.example.messageapp.extention.viewBinding
 import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.ui.archived.ArchivedActivity
 import com.example.messageapp.ui.blocked.BlockedActivity
+import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.ui.common.SwipeToArchiveCallback
 import com.example.messageapp.ui.contacts.ContactSelectionActivity
 import com.example.messageapp.ui.conversation.ConversationActivity
@@ -24,7 +25,7 @@ import com.example.messageapp.viewmodels.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val binding by viewBinding(ActivityMainBinding::inflate)
 
     private val repository by lazy { (application as Controller).repository }
@@ -43,15 +44,44 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
 
         setupDrawer()
+        setupToolbar()
         setupHomeUi()
     }
 
+    private fun setupToolbar() {
+        with(binding.incToolbar) {
+            ivSearch.setOnClickListener {
+                tvTitle.isVisible = false
+                ivMenu.isVisible = false
+                ivSearch.isVisible = false
+                ivBack.isVisible = true
+                etSearch.isVisible = true
+                etSearch.requestFocus()
+                val imm = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                imm.showSoftInput(etSearch, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+            }
+
+            ivBack.setOnClickListener {
+                if (etSearch.isVisible) {
+                    etSearch.isVisible = false
+                    etSearch.text?.clear()
+                    ivBack.isVisible = false
+                    ivMenu.isVisible = true
+                    tvTitle.isVisible = true
+                    ivSearch.isVisible = true
+                    val imm = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                    imm.hideSoftInputFromWindow(etSearch.windowToken, 0)
+                }
+            }
+
+            tvTitle.text=getString(R.string.messages)
+        }
+    }
+
     private fun setupDrawer() {
-        binding.toolbar.setNavigationIcon(R.drawable.ic_menu) // Assuming ic_menu exists or using default drawer icon
-        binding.toolbar.setNavigationOnClickListener {
+        binding.incToolbar.ivMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
 
@@ -66,6 +96,12 @@ class MainActivity : AppCompatActivity() {
             }
             true // Close drawer on selection
         }
+
+        // Add badge to Messages item
+        val messagesItem = binding.navView.menu.findItem(R.id.homeFragment)
+        messagesItem.setActionView(R.layout.layout_drawer_badge)
+        val badgeView = messagesItem.actionView?.findViewById<android.widget.TextView>(R.id.tv_badge)
+        badgeView?.text = "1"
     }
 
     private fun setupHomeUi() {

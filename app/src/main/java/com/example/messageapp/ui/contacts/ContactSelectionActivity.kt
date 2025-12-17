@@ -12,12 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import com.example.messageapp.Controller
 import com.example.messageapp.ui.adapters.ContactAdapter
 import com.example.messageapp.databinding.FragmentContactSelectionBinding
+import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.viewmodels.ContactSelectionViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ContactSelectionActivity : AppCompatActivity() {
+class ContactSelectionActivity : BaseActivity() {
 
     private lateinit var binding: FragmentContactSelectionBinding
 
@@ -45,12 +46,12 @@ class ContactSelectionActivity : AppCompatActivity() {
         binding = FragmentContactSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Select Contact"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setupToolbar()
 
         binding.recyclerContacts.apply {
             adapter = this@ContactSelectionActivity.adapter
-            layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ContactSelectionActivity)
+            layoutManager =
+                androidx.recyclerview.widget.LinearLayoutManager(this@ContactSelectionActivity)
         }
 
         checkPermissionAndSync()
@@ -64,7 +65,10 @@ class ContactSelectionActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.createdConversationId.collectLatest { id ->
                 if (id != null) {
-                    val intent = Intent(this@ContactSelectionActivity, ConversationActivity::class.java).apply {
+                    val intent = Intent(
+                        this@ContactSelectionActivity,
+                        ConversationActivity::class.java
+                    ).apply {
                         putExtra("conversationId", id)
                     }
                     startActivity(intent)
@@ -73,6 +77,26 @@ class ContactSelectionActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setupToolbar() {
+        binding.incToolbar.ivMenu.visibility = android.view.View.GONE
+        binding.incToolbar.tvTitle.visibility = android.view.View.GONE
+        binding.incToolbar.ivSearch.visibility = android.view.View.GONE
+        binding.incToolbar.ivBack.visibility = android.view.View.VISIBLE
+        binding.incToolbar.etSearch.visibility = android.view.View.VISIBLE
+
+        binding.incToolbar.ivBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.incToolbar.etSearch.addTextChangedListener(object : android.text.TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: android.text.Editable?) {
+                viewModel.onSearchQueryChanged(s.toString())
+            }
+        })
     }
 
     private fun checkPermissionAndSync() {
@@ -86,7 +110,7 @@ class ContactSelectionActivity : AppCompatActivity() {
             requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
     }
-    
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true

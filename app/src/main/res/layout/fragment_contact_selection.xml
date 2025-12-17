@@ -3,22 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="8dp"
-        android:text="@string/select_contact"
-        android:textAppearance="?attr/textAppearanceTitleMedium"
-        android:textSize="@dimen/text_body" />
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/include_main_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_contacts"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="@dimen/_15sdp"
         tools:listitem="@layout/item_contact" />
 </LinearLayout>
 

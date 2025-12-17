@@ -88,9 +88,9 @@ class SettingActivity : BaseActivity() {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.setType("text/plain")
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.messageapp))
             val shareMessage =
-                "\n${getString(R.string.msg_share_app)}\n\n https://play.google.com/store/apps/details?id=${packageName}"
+                "\n${getString(R.string.let_me_recommend_you_this_application)}\n\n https://play.google.com/store/apps/details?id=${packageName}"
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
             startActivity(Intent.createChooser(shareIntent, getString(R.string.choose_one)))
 

@@ -19,6 +19,9 @@ interface ConversationDao {
     @Query("SELECT * FROM conversations WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<ConversationEntity?>
 
+    @Query("SELECT * FROM conversations WHERE id = :id LIMIT 1")
+    suspend fun getById(id: Long): ConversationEntity?
+
     @Query("SELECT * FROM conversations WHERE contactId = :contactId LIMIT 1")
     suspend fun findByContact(contactId: Long): ConversationEntity?
 

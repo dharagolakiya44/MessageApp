@@ -14,11 +14,12 @@ import com.example.messageapp.Controller
 import com.example.messageapp.R
 import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
+import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.utils.formatTimestamp
 import com.example.messageapp.viewmodels.ConversationViewModel
 import kotlinx.coroutines.launch
 
-class ConversationActivity : AppCompatActivity() {
+class ConversationActivity : BaseActivity() {
 
     private lateinit var binding: FragmentConversationBinding
 
@@ -36,19 +37,11 @@ class ConversationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = FragmentConversationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Binding likely has a toolbar or header included. If FragmentConversationBinding 
-        // includes a custom toolbar, we use that. If not, we rely on Window Decor ActionBar.
-        // Checking fragment_conversation.xml would be ideal, but assume standard app bar behavior for now
-        // or setup custom toolbar if the layout has one.
-        // Given typically fragments had their own toolbars or relied on MainActivity's.
-        // We'll trust the binding structure. If it has a toolbar id, we set it.
-        // Since we didn't check layout file internals deeply, we default to standard supportActionBar behavior
-        // but hide it if layout provides its own header.
-        // EDIT: MainActivity had a toolbar. Fragment likely didn't. 
         
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = contactNameArg ?: "Chat"
+        // Hide system action bar if present, since we use custom toolbar layout
+        supportActionBar?.hide()
+
+        setupCustomToolbar()
 
         binding.recyclerMessages.apply {
             adapter = this@ConversationActivity.adapter
@@ -60,6 +53,10 @@ class ConversationActivity : AppCompatActivity() {
             binding.inputMessage.text?.clear()
         }
         
+        binding.buttonAdd?.setOnClickListener {
+             // Placeholder for future functionality
+        }
+        
         addMenuProvider(ConversationMenuProvider(
             onCall = { startCall() },
             onInfo = { showInfo() }
@@ -68,7 +65,7 @@ class ConversationActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.messages.collect { list ->
+                    viewModel.uiList.collect { list ->
                         adapter.submitList(list) {
                             if (list.isNotEmpty()) {
                                 binding.recyclerMessages.scrollToPosition(list.lastIndex)
@@ -79,15 +76,8 @@ class ConversationActivity : AppCompatActivity() {
                 }
                 launch {
                     viewModel.conversation.collect { conversation ->
-                        supportActionBar?.title = conversation?.contact?.name ?: contactNameArg
-                        supportActionBar?.subtitle = when {
-                            conversation?.contact?.isOnline == true -> getString(R.string.status_online)
-                            conversation?.contact?.lastSeen != null -> getString(
-                                R.string.status_last_seen,
-                                formatTimestamp(conversation.contact.lastSeen)
-                            )
-                            else -> getString(R.string.status_offline)
-                        }
+                        val name = conversation?.contact?.name ?: contactNameArg
+                        binding.textTitle.text = name
                     }
                 }
                 launch {
@@ -100,10 +90,24 @@ class ConversationActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupCustomToolbar() {
+        binding.buttonBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        binding.buttonCall.setOnClickListener {
+            startCall()
+        }
+        binding.buttonInfo.setOnClickListener {
+            showInfo()
+        }
+        
+        binding.textTitle.text = contactNameArg ?: "Chat"
+    }
+
     private fun startCall() {
         val phone = viewModel.conversation.value?.contact?.phone
         if (phone.isNullOrBlank()) {
-            Toast.makeText(this, R.string.no_phone_available, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.no_phone_number_available, Toast.LENGTH_SHORT).show()
             return
         }
         val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phone"))
@@ -111,7 +115,7 @@ class ConversationActivity : AppCompatActivity() {
     }
 
     private fun showInfo() {
-        Toast.makeText(this, R.string.conversation_info_hint, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {

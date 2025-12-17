@@ -26,7 +26,6 @@ class ContactAdapter(
         holder.binding.apply {
             textName.text = item.name
             textPhone.text = item.phone
-            textStatus.text = if (item.isOnline) "Online" else "Last seen recently"
         }
         holder.itemView.setOnClickListener { onContactSelected(item) }
     }

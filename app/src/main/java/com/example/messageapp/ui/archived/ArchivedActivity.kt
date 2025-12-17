@@ -10,13 +10,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.messageapp.Controller
 import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.databinding.FragmentArchivedBinding
+import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.ui.common.SwipeToArchiveCallback
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.viewmodels.ArchivedViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ArchivedActivity : AppCompatActivity() {
+class ArchivedActivity : BaseActivity() {
 
     private lateinit var binding: FragmentArchivedBinding
 

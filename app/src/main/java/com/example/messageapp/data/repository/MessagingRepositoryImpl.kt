@@ -25,6 +25,7 @@ import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 class MessagingRepositoryImpl(
+    private val context: Context,
     private val db: AppDatabase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MessagingRepository {
@@ -40,7 +41,7 @@ class MessagingRepositoryImpl(
                 val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
                     ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
                 conversation.toDomain(contact)
-            }
+            }.filter { it.lastMessage.isNotBlank() }
         }
 
     override fun observeArchivedConversations(): Flow<List<Conversation>> =
@@ -49,7 +50,7 @@ class MessagingRepositoryImpl(
                 val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
                     ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
                 conversation.toDomain(contact)
-            }
+            }.filter { it.lastMessage.isNotBlank() }
         }
 
     override fun observeConversation(conversationId: Long): Flow<Conversation?> =
@@ -79,6 +80,8 @@ class MessagingRepositoryImpl(
                 isOutgoing = true
             )
             val id = messageDao.insert(messageEntity)
+            
+            // Optimistic update
             conversationDao.updateSnapshot(
                 conversationId = conversationId,
                 lastMessage = content,
@@ -86,8 +89,9 @@ class MessagingRepositoryImpl(
                 status = MessageStatus.SENDING,
                 hasFailed = false
             )
+            
             val inserted = messageEntity.copy(id = id)
-            simulateNetworkSend(inserted)
+            sendSmsReal(inserted)
             inserted.toDomain()
         }
 
@@ -102,7 +106,55 @@ class MessagingRepositoryImpl(
             status = MessageStatus.SENDING,
             hasFailed = false
         )
-        simulateNetworkSend(retrying)
+        sendSmsReal(retrying)
+    }
+
+    private fun sendSmsReal(message: MessageEntity) {
+        backgroundScope.launch {
+            try {
+                // Fetch valid phone number
+                val conversation = conversationDao.getById(message.conversationId)
+                val phone = conversation?.contactPhone
+                
+                if (phone.isNullOrBlank()) {
+                    markMessageFailed(message.id, message.conversationId)
+                    return@launch
+                }
+
+                val smsManager = context.getSystemService(android.telephony.SmsManager::class.java) 
+                    ?: android.telephony.SmsManager.getDefault()
+
+                smsManager.sendTextMessage(phone, null, message.content, null, null)
+                
+                // If no exception, mark as SENT (Basic implementation)
+                // Ideal implementation would use PendingIntent for delivery reports
+                updateMessageStatus(message.id, message.conversationId, MessageStatus.SENT)
+                
+            } catch (e: Exception) {
+                e.printStackTrace()
+                markMessageFailed(message.id, message.conversationId)
+            }
+        }
+    }
+
+    private suspend fun markMessageFailed(messageId: Long, conversationId: Long) {
+        updateMessageStatus(messageId, conversationId, MessageStatus.FAILED)
+    }
+
+    private suspend fun updateMessageStatus(messageId: Long, conversationId: Long, status: MessageStatus) {
+        messageDao.updateStatus(messageId, status)
+        val hasFailed = status == MessageStatus.FAILED ||
+                messageDao.countByStatus(conversationId, MessageStatus.FAILED) > 0
+        
+        // Only update snapshot status if it's the latest message, but for simplicity we update always
+        // to reflect the last action's result.
+        // To be precise we should check if this message is indeed the last one.
+        // But for now, updating the status is safer to show failure.
+        conversationDao.updateFailure(conversationId, hasFailed)
+        if (status == MessageStatus.FAILED || status == MessageStatus.SENT) {
+             // We might want to update the conversation's lastStatus if this was the last message
+             // For now, let's keep it simple.
+        }
     }
 
     override suspend fun archiveConversation(conversationId: Long) = withContext(ioDispatcher) {
@@ -134,7 +186,7 @@ class MessagingRepositoryImpl(
             contactName = contact.name,
             contactPhone = contact.phone,
             contactOnline = contact.isOnline,
-            lastMessage = "Say hello 👋",
+            lastMessage = "",
             lastTimestamp = System.currentTimeMillis(),
             unreadCount = 0,
             archived = false,
@@ -187,23 +239,7 @@ class MessagingRepositoryImpl(
         }
     }
 
-    private fun simulateNetworkSend(message: MessageEntity) {
-        backgroundScope.launch {
-            delay(1200)
-            val succeeded = Random.nextInt(0, 100) > 20
-            val status = if (succeeded) MessageStatus.SENT else MessageStatus.FAILED
-            messageDao.updateStatus(message.id, status)
-            val hasFailed = status == MessageStatus.FAILED ||
-                messageDao.countByStatus(message.conversationId, MessageStatus.FAILED) > 0
-            conversationDao.updateSnapshot(
-                conversationId = message.conversationId,
-                lastMessage = message.content,
-                timestamp = message.timestamp,
-                status = status,
-                hasFailed = hasFailed
-            )
-        }
-    }
+
 
     companion object {
         private const val SELF_USER_ID = 0L

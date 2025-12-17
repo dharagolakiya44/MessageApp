@@ -37,8 +37,26 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/inter_semi_bold"
-            android:textSize="@dimen/_16ssp"
-            android:text="@string/app_name" />
+            android:text="@string/messageapp"
+            android:textSize="@dimen/_16ssp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/bg_search_round"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:hint="Search"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:textColor="@color/colorTextBlack"
+            android:textColorHint="@color/colorTextHint"
+            android:textSize="@dimen/_12ssp"
+            android:visibility="gone" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivSearch"
