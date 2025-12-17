@@ -96,6 +96,12 @@ class MainActivity : BaseActivity() {
             }
             true // Close drawer on selection
         }
+
+        // Add badge to Messages item
+        val messagesItem = binding.navView.menu.findItem(R.id.homeFragment)
+        messagesItem.setActionView(R.layout.layout_drawer_badge)
+        val badgeView = messagesItem.actionView?.findViewById<android.widget.TextView>(R.id.tv_badge)
+        badgeView?.text = "1"
     }
 
     private fun setupHomeUi() {
