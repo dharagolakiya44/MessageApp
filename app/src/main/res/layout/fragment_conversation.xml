@@ -43,15 +43,6 @@
                 android:textSize="18sp"
                 tools:text="Samsung Helpline" />
 
-            <TextView
-                android:id="@+id/text_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorTextHint"
-                android:textSize="12sp"
-                android:visibility="gone"
-                tools:text="Online"
-                tools:visibility="visible" />
         </LinearLayout>
 
         <ImageView

@@ -20,7 +20,7 @@ class Controller : Application() {
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     val database: AppDatabase by lazy { AppDatabase.getInstance(this, applicationScope) }
-    val repository: MessagingRepository by lazy { MessagingRepositoryImpl(database) }
+    val repository: MessagingRepository by lazy { MessagingRepositoryImpl(this, database) }
 
     override fun onCreate() {
         super.onCreate()

@@ -13,6 +13,7 @@
         android:padding="12dp">
 
         <TextView
+            android:textSize="@dimen/text_large"
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +27,7 @@
             android:layout_below="@id/text_name"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="@color/colorTextHint"
-            android:textSize="@dimen/text_body"
+            android:textSize="@dimen/text_small"
             tools:text="See you soon!" />
 
         <TextView
@@ -68,10 +69,10 @@
 
         <TextView
             android:id="@+id/text_status"
+            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/text_message"
             android:textAppearance="?attr/textAppearanceLabelSmall"
             android:textColor="@color/colorTextHint"
             android:textSize="@dimen/text_small"

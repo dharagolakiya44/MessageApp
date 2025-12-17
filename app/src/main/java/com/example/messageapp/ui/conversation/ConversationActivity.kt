@@ -78,16 +78,6 @@ class ConversationActivity : BaseActivity() {
                     viewModel.conversation.collect { conversation ->
                         val name = conversation?.contact?.name ?: contactNameArg
                         binding.textTitle.text = name
-                        
-                        binding.textSubtitle.isVisible = true
-                        binding.textSubtitle.text = when {
-                            conversation?.contact?.isOnline == true -> getString(R.string.online)
-                            conversation?.contact?.lastSeen != null -> getString(
-                                R.string.last_seen,
-                                formatTimestamp(conversation.contact.lastSeen)
-                            )
-                            else -> getString(R.string.offline)
-                        }
                     }
                 }
                 launch {
