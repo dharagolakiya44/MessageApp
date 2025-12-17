@@ -77,6 +77,7 @@ class ChatMessageAdapter(
                     }
                     bubbleCard.setCardBackgroundColor(root.context.getColor(R.color.colorPrimary))
                     bubbleText.setTextColor(root.context.getColor(R.color.colorWhiteCommon))
+                    textTime.setTextColor(root.context.getColor(R.color.colorWhiteCommon))
                     textStatus.setTextColor(root.context.getColor(R.color.colorTextHint)) // Kept hint color for subtlety or change to white if needed
                 } else {
                     bubbleContainer.apply {
@@ -86,6 +87,7 @@ class ChatMessageAdapter(
                     }
                     bubbleCard.setCardBackgroundColor(root.context.getColor(android.R.color.white))
                     bubbleText.setTextColor(root.context.getColor(R.color.colorTextBlack))
+                    textTime.setTextColor(root.context.getColor(R.color.colorTextBlack))
                 }
             }
         }
