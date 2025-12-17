@@ -12,12 +12,23 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
+        <ImageView
+            android:id="@+id/image_avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_user_placeholder"
+            tools:ignore="ContentDescription" />
+
         <TextView
-            android:textSize="@dimen/text_large"
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/image_avatar"
             android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textSize="@dimen/text_large"
             tools:text="Alex Johnson" />
 
         <TextView
@@ -25,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_name"
+            android:layout_toEndOf="@id/image_avatar"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="@color/colorTextHint"
             android:textSize="@dimen/text_small"
@@ -49,8 +61,8 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
             android:textColor="@android:color/white"
-            android:textStyle="bold"
             android:textSize="@dimen/text_badge"
+            android:textStyle="bold"
             android:visibility="gone"
             tools:text="2"
             tools:visibility="visible" />
@@ -69,10 +81,10 @@
 
         <TextView
             android:id="@+id/text_status"
-            android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:textAppearance="?attr/textAppearanceLabelSmall"
             android:textColor="@color/colorTextHint"
             android:textSize="@dimen/text_small"
