@@ -121,14 +121,52 @@ class MessagingRepositoryImpl(
                     return@launch
                 }
 
+                val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager
+                if (telephonyManager != null && telephonyManager.simState == android.telephony.TelephonyManager.SIM_STATE_ABSENT) {
+                    markMessageFailed(message.id, message.conversationId)
+                    return@launch
+                }
+
                 val smsManager = context.getSystemService(android.telephony.SmsManager::class.java) 
                     ?: android.telephony.SmsManager.getDefault()
 
-                smsManager.sendTextMessage(phone, null, message.content, null, null)
-                
-                // If no exception, mark as SENT (Basic implementation)
-                // Ideal implementation would use PendingIntent for delivery reports
-                updateMessageStatus(message.id, message.conversationId, MessageStatus.SENT)
+                val SENT_ACTION = "SMS_SENT_${message.id}"
+                val sentIntent = android.app.PendingIntent.getBroadcast(
+                    context,
+                    message.id.toInt(),
+                    android.content.Intent(SENT_ACTION),
+                    android.app.PendingIntent.FLAG_ONE_SHOT or android.app.PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val receiver = object : android.content.BroadcastReceiver() {
+                    override fun onReceive(c: Context?, intent: android.content.Intent?) {
+                        when (resultCode) {
+                            android.app.Activity.RESULT_OK -> {
+                                backgroundScope.launch {
+                                    updateMessageStatus(message.id, message.conversationId, MessageStatus.SENT)
+                                }
+                            }
+                            else -> {
+                                backgroundScope.launch {
+                                    markMessageFailed(message.id, message.conversationId)
+                                }
+                            }
+                        }
+                        try {
+                            context.unregisterReceiver(this)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(receiver, android.content.IntentFilter(SENT_ACTION), Context.RECEIVER_EXPORTED)
+                } else {
+                    context.registerReceiver(receiver, android.content.IntentFilter(SENT_ACTION))
+                }
+
+                smsManager.sendTextMessage(phone, null, message.content, sentIntent, null)
                 
             } catch (e: Exception) {
                 e.printStackTrace()

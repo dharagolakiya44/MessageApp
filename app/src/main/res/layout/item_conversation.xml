@@ -75,7 +75,7 @@
             android:layout_below="@id/badge_unread"
             android:layout_marginTop="4dp"
             android:contentDescription="@string/message_failed"
-            android:src="@drawable/ic_error"
+            android:src="@drawable/ic_failed_message"
             android:visibility="gone"
             tools:visibility="visible" />
 
