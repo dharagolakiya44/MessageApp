@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
@@ -14,35 +15,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessageApp">
+
         <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".activity.SelectThemeModeActivity"
+            android:name=".ui.theme.SelectThemeModeActivity"
             android:exported="false" />
         <activity
             android:name=".ui.settings.SettingActivity"
             android:exported="false" />
-
-        <activity android:name=".ui.archived.ArchivedActivity"
+        <activity
+            android:name=".ui.archived.ArchivedActivity"
             android:exported="false" />
-
-        <activity android:name=".ui.scheduled.ScheduledActivity"
+        <activity
+            android:name=".ui.scheduled.ScheduledActivity"
             android:exported="false" />
-
-        <activity android:name=".ui.blocked.BlockedActivity"
+        <activity
+            android:name=".ui.blocked.BlockedActivity"
             android:exported="false" />
-
-        <activity android:name=".ui.contacts.ContactSelectionActivity"
+        <activity
+            android:name=".ui.contacts.ContactSelectionActivity"
             android:exported="false" />
-
-        <activity android:name=".ui.conversation.ConversationActivity"
+        <activity
+            android:name=".ui.conversation.ConversationActivity"
             android:exported="false" />
     </application>
 

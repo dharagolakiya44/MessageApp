@@ -1,10 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SelectThemeModeActivity">
+    android:background="@color/colorBgMain"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/include_main_toolbar" />
+
+    <View style="@style/HorizontalLineStyle" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingTop="@dimen/_20sdp"
+        android:weightSum="3">
+
+        <!-- Light Mode -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/llDayMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:src="@drawable/theme_preview_light" />
+
+                <!-- Selector Overlay/Border -->
+                <View
+                    android:id="@+id/viewDayModeSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:background="@drawable/bg_theme_card_selector" />
+                
+                <!-- Radio/Check Icon (Hidden by default or overlay? Design shows just border, but commonly check icon too)
+                     The design shows just border highlight on the card itself or a 'selected' state. 
+                     The design screenshot shows a checkmark in the toolbar, so maybe no check on card?
+                     Wait, looking closely at the screenshot... 
+                     The 'System' card is half white/half black. 
+                     The 'Light' card is white.
+                     The 'Dark' card is black.
+                     The selected one (Light) has a BLUE BORDER.
+                     There are NO radio buttons in the card.
+                     The checkmark is ONLY in the toolbar (top right).
+                 -->
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/day_mode"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <!-- Dark Mode -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/llNightMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:src="@drawable/theme_preview_dark" />
+
+                <View
+                    android:id="@+id/viewNightModeSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:background="@drawable/bg_theme_card_selector" />
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/night_mode"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+        <!-- System Mode -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/llSystemMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:src="@drawable/theme_preview_system" />
+
+                <View
+                    android:id="@+id/viewSystemModeSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_80sdp"
+                    android:background="@drawable/bg_theme_card_selector" />
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/system_mode"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_12ssp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </androidx.appcompat.widget.LinearLayoutCompat>

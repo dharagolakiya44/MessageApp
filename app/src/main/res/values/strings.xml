@@ -47,6 +47,9 @@
     <string name="share">Share</string>
     <string name="let_me_recommend_you_this_application">Let me recommend you this application</string>
     <string name="choose_one">Choose One</string>
+    <string name="system_mode">System Mode</string>
+    <string name="day_mode">Day Mode</string>
+    <string name="night_mode">Night Mode</string>
     <string name="add">Add</string>
 
 </resources>
