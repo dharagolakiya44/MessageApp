@@ -125,16 +125,36 @@ class MainActivity : BaseActivity() {
     }
 
     private fun showMoreMenu(view: android.view.View) {
+        val selectedIds = conversationAdapter.getSelectedItems()
+        if (selectedIds.isEmpty()) return
+
+        // We need to know the state of selected items to decide what to show
+        // Ideally we should query the current list from the adapter or viewmodel
+        // For simplicity, we can get items from adapter if exposed, or just show both/toggle blindly.
+        // Let's retrieve items from adapter.
+        
+        val selectedItems = selectedIds.mapNotNull { id -> conversationAdapter.currentList.find { it.id == id } }
+        
+        val allPinned = selectedItems.all { it.isPinned }
+        val allUnread = selectedItems.all { it.unreadCount > 0 }
+        
         val popup = androidx.appcompat.widget.PopupMenu(this, view)
-        popup.menu.add(0, 1, 0, getString(R.string.pin))
-        popup.menu.add(0, 2, 0, getString(R.string.mark_unread))
+        
+        val pinTitle = if (allPinned) getString(R.string.unpin) else getString(R.string.pin)
+        val readTitle = if (allUnread) getString(R.string.mark_read) else getString(R.string.mark_unread)
+
+        popup.menu.add(0, 1, 0, pinTitle)
+        popup.menu.add(0, 2, 0, readTitle)
         
         popup.setOnMenuItemClickListener { item ->
-            val selected = conversationAdapter.getSelectedItems()
-            if (selected.isNotEmpty()) {
+            val finalSelected = conversationAdapter.getSelectedItems()
+            if (finalSelected.isNotEmpty()) {
                 when (item.itemId) {
-                    1 -> viewModel.pinConversations(selected, true)
-                    2 -> viewModel.markAsUnread(selected)
+                    1 -> viewModel.pinConversations(finalSelected, !allPinned)
+                    2 -> {
+                        if (allUnread) viewModel.markAsRead(finalSelected)
+                        else viewModel.markAsUnread(finalSelected)
+                    }
                 }
                 conversationAdapter.clearSelection()
             }

@@ -38,8 +38,11 @@ class ConversationAdapter(
             textName.text = item.contact.name
             textMessage.text = item.lastMessage
             textTime.text = formatTimestamp(item.lastTimestamp)
-            badgeUnread.isVisible = item.unreadCount > 0 && !selectionMode
-            badgeUnread.text = item.unreadCount.toString()
+            textTime.text = formatTimestamp(item.lastTimestamp)
+            
+            iconPin.isVisible = item.isPinned
+            indicatorUnread.isVisible = item.unreadCount > 0
+            
             iconError.isVisible = item.hasFailedMessage
             textStatus.isVisible = !item.hasFailedMessage
             textStatus.text = item.lastStatus.name.lowercase().replaceFirstChar { it.uppercase() }

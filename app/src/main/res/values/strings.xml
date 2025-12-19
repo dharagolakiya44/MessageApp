@@ -58,5 +58,7 @@
     <string name="archive">Archive</string>
     <string name="more">More</string>
     <string name="pin">Pin</string>
+    <string name="unpin">Unpin</string>
     <string name="mark_unread">Mark as unread</string>
+    <string name="mark_read">Mark as read</string>
 </resources>
