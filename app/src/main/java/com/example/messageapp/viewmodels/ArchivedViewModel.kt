@@ -22,6 +22,22 @@ class ArchivedViewModel(
         viewModelScope.launch { repository.unarchiveConversation(id) }
     }
 
+    fun deleteConversation(id: Long) {
+        viewModelScope.launch { repository.deleteConversation(id) }
+    }
+
+    fun deleteConversations(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.deleteConversation(it) }
+        }
+    }
+
+    fun unarchiveConversations(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.unarchiveConversation(it) }
+        }
+    }
+
     class Factory(private val repository: MessagingRepository) : ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

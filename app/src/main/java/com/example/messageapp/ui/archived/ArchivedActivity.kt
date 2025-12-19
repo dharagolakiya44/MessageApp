@@ -2,16 +2,18 @@ package com.example.messageapp.ui.archived
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.example.messageapp.Controller
+import com.example.messageapp.R
 import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.databinding.FragmentArchivedBinding
 import com.example.messageapp.ui.common.BaseActivity
-import com.example.messageapp.ui.common.SwipeToArchiveCallback
+import com.example.messageapp.ui.common.ConversationSwipeCallback
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.viewmodels.ArchivedViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -25,37 +27,51 @@ class ArchivedActivity : BaseActivity() {
     private val viewModel: ArchivedViewModel by viewModels { ArchivedViewModel.Factory(repository) }
 
     private val adapter by lazy {
-        ConversationAdapter { conversation ->
-            val intent = Intent(this, ConversationActivity::class.java).apply {
-                putExtra("conversationId", conversation.id)
-                putExtra("contactName", conversation.contact.name)
+        ConversationAdapter(
+            onConversationClick = { conversation ->
+                val intent = Intent(this, ConversationActivity::class.java).apply {
+                    putExtra("conversationId", conversation.id)
+                    putExtra("contactName", conversation.contact.name)
+                }
+                startActivity(intent)
+            },
+            onSelectionChanged = { count ->
+                updateSelectionUi(count)
             }
-            startActivity(intent)
-        }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentArchivedBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
-        // Reusing fragment layout effectively requires handling toolbar if present, 
-        // or just wrapping content. FragmentArchivedBinding likely contains a recycler.
-        // If it lacks a Toolbar, we might need a new layout. Assuming it's just content for now,
-        // and add a back button support if possible.
-        supportActionBar?.title = "Archived"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackPress()
+            }
+        })
+
+        setupToolbar()
+        setupBottomActions()
 
         binding.recyclerArchived.apply {
             adapter = this@ArchivedActivity.adapter
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ArchivedActivity)
         }
-        
+
         ItemTouchHelper(
-            SwipeToArchiveCallback(this) { position ->
-                val conversation = adapter.getItemAt(position)
-                viewModel.unarchiveConversation(conversation.id)
-            }
+            ConversationSwipeCallback(
+                context = this,
+                onArchive = { position ->
+                    val conversation = adapter.getItemAt(position)
+                    viewModel.unarchiveConversation(conversation.id)
+                },
+                onDelete = { position ->
+                    val conversation = adapter.getItemAt(position)
+                    viewModel.deleteConversation(conversation.id)
+                }
+            )
         ).attachToRecyclerView(binding.recyclerArchived)
 
         lifecycleScope.launch {
@@ -65,9 +81,58 @@ class ArchivedActivity : BaseActivity() {
             }
         }
     }
+
+    private fun setupToolbar() {
+        binding.incToolbar.ivBack.setOnClickListener {
+            handleBackPress()
+        }
+        binding.incToolbar.tvTitle.text = getString(R.string.archived)
+
+        binding.incToolbar.ivBack.visibility= View.VISIBLE
+        binding.incToolbar.ivMenu.visibility= View.GONE
+        binding.incToolbar.ivSearch.visibility= View.GONE
+    }
     
+    private fun setupBottomActions() {
+        binding.actionDelete.setOnClickListener {
+            val selected = adapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                viewModel.deleteConversations(selected)
+                adapter.clearSelection()
+            }
+        }
+        
+        binding.actionUnarchive.setOnClickListener {
+            val selected = adapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                viewModel.unarchiveConversations(selected)
+                adapter.clearSelection()
+            }
+        }
+    }
+    
+    private fun updateSelectionUi(count: Int) {
+        if (count > 0) {
+            binding.incToolbar.tvTitle.text = "$count Selected"
+            binding.incToolbar.ivBack.setImageResource(R.drawable.ic_close)
+            binding.layoutBottomActions.visibility = View.VISIBLE
+        } else {
+            binding.incToolbar.tvTitle.text = getString(R.string.archived)
+            binding.incToolbar.ivBack.setImageResource(R.drawable.ic_back)
+            binding.layoutBottomActions.visibility = View.GONE
+        }
+    }
+    
+    private fun handleBackPress() {
+        if (adapter.selectionMode) {
+            adapter.clearSelection()
+        } else {
+            onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressedDispatcher.onBackPressed()
+        handleBackPress()
         return true
     }
 }

@@ -40,6 +40,9 @@ interface ConversationDao {
     @Query("UPDATE conversations SET archived = 0 WHERE id = :conversationId")
     suspend fun unarchive(conversationId: Long)
 
+    @Query("DELETE FROM conversations WHERE id = :conversationId")
+    suspend fun deleteById(conversationId: Long)
+
     @Query("UPDATE conversations SET unreadCount = 0")
     suspend fun markAllRead()
 

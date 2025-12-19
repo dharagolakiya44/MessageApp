@@ -22,6 +22,10 @@ class HomeViewModel(
         viewModelScope.launch { repository.archiveConversation(id) }
     }
 
+    fun deleteConversation(id: Long) {
+        viewModelScope.launch { repository.deleteConversation(id) }
+    }
+
     fun markAllRead() {
         viewModelScope.launch { repository.markAllAsRead() }
     }

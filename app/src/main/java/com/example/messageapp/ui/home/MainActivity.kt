@@ -17,7 +17,7 @@ import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.ui.archived.ArchivedActivity
 import com.example.messageapp.ui.blocked.BlockedActivity
 import com.example.messageapp.ui.common.BaseActivity
-import com.example.messageapp.ui.common.SwipeToArchiveCallback
+import com.example.messageapp.ui.common.ConversationSwipeCallback
 import com.example.messageapp.ui.contacts.ContactSelectionActivity
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.ui.scheduled.ScheduledActivity
@@ -32,13 +32,15 @@ class MainActivity : BaseActivity() {
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory(repository) }
 
     private val conversationAdapter by lazy {
-        ConversationAdapter { conversation ->
+    private val conversationAdapter by lazy {
+        ConversationAdapter(onConversationClick = { conversation ->
             val intent = Intent(this, ConversationActivity::class.java).apply {
                 putExtra("conversationId", conversation.id)
                 putExtra("contactName", conversation.contact.name)
             }
             startActivity(intent)
-        }
+        })
+    }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,10 +113,17 @@ class MainActivity : BaseActivity() {
         }
 
         ItemTouchHelper(
-            SwipeToArchiveCallback(this) { position ->
-                val conversation = conversationAdapter.getItemAt(position)
-                viewModel.archiveConversation(conversation.id)
-            }
+            ConversationSwipeCallback(
+                context = this,
+                onArchive = { position ->
+                    val conversation = conversationAdapter.getItemAt(position)
+                    viewModel.archiveConversation(conversation.id)
+                },
+                onDelete = { position ->
+                    val conversation = conversationAdapter.getItemAt(position)
+                    viewModel.deleteConversation(conversation.id)
+                }
+            )
         ).attachToRecyclerView(binding.recyclerConversations)
 
         binding.fabStartChat.setOnClickListener {

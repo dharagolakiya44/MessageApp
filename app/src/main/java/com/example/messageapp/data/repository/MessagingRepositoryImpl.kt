@@ -203,6 +203,10 @@ class MessagingRepositoryImpl(
         conversationDao.unarchive(conversationId)
     }
 
+    override suspend fun deleteConversation(conversationId: Long) = withContext(ioDispatcher) {
+        conversationDao.deleteById(conversationId)
+    }
+
     override suspend fun markAllAsRead() = withContext(ioDispatcher) {
         conversationDao.markAllRead()
     }

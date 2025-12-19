@@ -17,6 +17,7 @@ interface MessagingRepository {
     suspend fun retryMessage(messageId: Long)
     suspend fun archiveConversation(conversationId: Long)
     suspend fun unarchiveConversation(conversationId: Long)
+    suspend fun deleteConversation(conversationId: Long)
     suspend fun markAllAsRead()
     suspend fun markConversationRead(conversationId: Long)
     suspend fun getOrCreateConversation(contactId: Long): Long
