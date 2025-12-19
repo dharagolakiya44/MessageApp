@@ -60,19 +60,7 @@ class ArchivedActivity : BaseActivity() {
             layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this@ArchivedActivity)
         }
 
-        ItemTouchHelper(
-            ConversationSwipeCallback(
-                context = this,
-                onArchive = { position ->
-                    val conversation = adapter.getItemAt(position)
-                    viewModel.unarchiveConversation(conversation.id)
-                },
-                onDelete = { position ->
-                    val conversation = adapter.getItemAt(position)
-                    viewModel.deleteConversation(conversation.id)
-                }
-            )
-        ).attachToRecyclerView(binding.recyclerArchived)
+
 
         lifecycleScope.launch {
             viewModel.conversations.collectLatest { list ->
@@ -127,7 +115,7 @@ class ArchivedActivity : BaseActivity() {
         if (adapter.selectionMode) {
             adapter.clearSelection()
         } else {
-            onBackPressedDispatcher.onBackPressed()
+            finish()
         }
     }
 

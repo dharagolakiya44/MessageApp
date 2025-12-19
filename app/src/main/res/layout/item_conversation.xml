@@ -12,21 +12,36 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
-        <ImageView
-            android:id="@+id/image_avatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+        <FrameLayout
+            android:id="@+id/layout_image_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_user_placeholder"
-            tools:ignore="ContentDescription" />
+            android:layout_marginEnd="16dp">
+
+            <ImageView
+                android:id="@+id/image_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_user_placeholder"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/image_selected"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_check_circle_blue"
+                android:visibility="gone"
+                tools:ignore="ContentDescription"
+                tools:visibility="visible"/>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_avatar"
+            android:layout_toEndOf="@id/layout_image_container"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textSize="@dimen/text_large"
             tools:text="Alex Johnson" />
@@ -36,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/text_name"
-            android:layout_toEndOf="@id/image_avatar"
+            android:layout_toEndOf="@id/layout_image_container"
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="@color/colorTextHint"
             android:textSize="@dimen/text_small"

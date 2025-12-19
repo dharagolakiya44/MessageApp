@@ -32,7 +32,6 @@ class MainActivity : BaseActivity() {
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory(repository) }
 
     private val conversationAdapter by lazy {
-    private val conversationAdapter by lazy {
         ConversationAdapter(onConversationClick = { conversation ->
             val intent = Intent(this, ConversationActivity::class.java).apply {
                 putExtra("conversationId", conversation.id)
@@ -40,7 +39,6 @@ class MainActivity : BaseActivity() {
             }
             startActivity(intent)
         })
-    }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
