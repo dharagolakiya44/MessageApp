@@ -10,11 +10,14 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ConversationDao {
-    @Query("SELECT * FROM conversations WHERE archived = 0 ORDER BY lastTimestamp DESC")
+    @Query("SELECT * FROM conversations WHERE archived = 0 AND blocked = 0 ORDER BY pinned DESC, lastTimestamp DESC")
     fun observeActive(): Flow<List<ConversationEntity>>
 
-    @Query("SELECT * FROM conversations WHERE archived = 1 ORDER BY lastTimestamp DESC")
+    @Query("SELECT * FROM conversations WHERE archived = 1 AND blocked = 0 ORDER BY lastTimestamp DESC")
     fun observeArchived(): Flow<List<ConversationEntity>>
+
+    @Query("SELECT * FROM conversations WHERE blocked = 1 ORDER BY lastTimestamp DESC")
+    fun observeBlocked(): Flow<List<ConversationEntity>>
 
     @Query("SELECT * FROM conversations WHERE id = :id LIMIT 1")
     fun observeById(id: Long): Flow<ConversationEntity?>
@@ -48,6 +51,15 @@ interface ConversationDao {
 
     @Query("UPDATE conversations SET unreadCount = 0 WHERE id = :conversationId")
     suspend fun markRead(conversationId: Long)
+
+    @Query("UPDATE conversations SET unreadCount = 1 WHERE id = :conversationId")
+    suspend fun markUnread(conversationId: Long)
+
+    @Query("UPDATE conversations SET pinned = :isPinned WHERE id = :conversationId")
+    suspend fun updatePinned(conversationId: Long, isPinned: Boolean)
+
+    @Query("UPDATE conversations SET blocked = :isBlocked WHERE id = :conversationId")
+    suspend fun updateBlocked(conversationId: Long, isBlocked: Boolean)
 
     @Query(
         "UPDATE conversations SET lastMessage = :lastMessage, lastTimestamp = :timestamp, lastStatus = :status, hasFailedMessage = :hasFailed WHERE id = :conversationId"

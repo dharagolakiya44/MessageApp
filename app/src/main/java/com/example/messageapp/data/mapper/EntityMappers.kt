@@ -24,7 +24,9 @@ fun ConversationEntity.toDomain(contact: Contact = Contact(contactId, contactNam
         unreadCount = unreadCount,
         isArchived = archived,
         lastStatus = lastStatus,
-        hasFailedMessage = hasFailedMessage
+        hasFailedMessage = hasFailedMessage,
+        isPinned = pinned,
+        isBlocked = blocked
     )
 
 fun MessageEntity.toDomain(): ChatMessage = ChatMessage(

@@ -54,4 +54,9 @@
 
     <string name="delete">Delete</string>
     <string name="unarchive">Unarchive</string>
+    <string name="block">Block</string>
+    <string name="archive">Archive</string>
+    <string name="more">More</string>
+    <string name="pin">Pin</string>
+    <string name="mark_unread">Mark as unread</string>
 </resources>

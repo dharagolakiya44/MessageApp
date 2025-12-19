@@ -53,6 +53,15 @@ class MessagingRepositoryImpl(
             }.filter { it.lastMessage.isNotBlank() }
         }
 
+    override fun observeBlockedConversations(): Flow<List<Conversation>> =
+        combine(conversationDao.observeBlocked(), contactDao.observeContacts()) { conversations, contacts ->
+            conversations.map { conversation ->
+                val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
+                    ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
+                conversation.toDomain(contact)
+            }.filter { it.lastMessage.isNotBlank() }
+        }
+
     override fun observeConversation(conversationId: Long): Flow<Conversation?> =
         combine(conversationDao.observeById(conversationId), contactDao.observeContacts()) { conversation, contacts ->
             conversation?.let {
@@ -233,7 +242,9 @@ class MessagingRepositoryImpl(
             unreadCount = 0,
             archived = false,
             lastStatus = MessageStatus.SENT,
-            hasFailedMessage = false
+            hasFailedMessage = false,
+            pinned = false,
+            blocked = false
         )
         conversationDao.upsert(conversation)
         newId
@@ -282,6 +293,18 @@ class MessagingRepositoryImpl(
     }
 
 
+
+    override suspend fun markConversationUnread(conversationId: Long) = withContext(ioDispatcher) {
+        conversationDao.markUnread(conversationId)
+    }
+
+    override suspend fun pinConversation(conversationId: Long, isPinned: Boolean) = withContext(ioDispatcher) {
+        conversationDao.updatePinned(conversationId, isPinned)
+    }
+
+    override suspend fun blockConversation(conversationId: Long, isBlocked: Boolean) = withContext(ioDispatcher) {
+        conversationDao.updateBlocked(conversationId, isBlocked)
+    }
 
     companion object {
         private const val SELF_USER_ID = 0L

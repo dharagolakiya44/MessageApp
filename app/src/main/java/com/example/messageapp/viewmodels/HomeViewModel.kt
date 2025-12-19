@@ -26,6 +26,42 @@ class HomeViewModel(
         viewModelScope.launch { repository.deleteConversation(id) }
     }
 
+    fun deleteConversations(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.deleteConversation(it) }
+        }
+    }
+
+    fun archiveConversations(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.archiveConversation(it) }
+        }
+    }
+
+    fun markAsRead(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.markConversationRead(it) }
+        }
+    }
+
+    fun markAsUnread(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.markConversationUnread(it) }
+        }
+    }
+
+    fun pinConversations(ids: List<Long>, isPinned: Boolean) {
+        viewModelScope.launch {
+            ids.forEach { repository.pinConversation(it, isPinned) }
+        }
+    }
+
+    fun blockConversations(ids: List<Long>) {
+        viewModelScope.launch {
+            ids.forEach { repository.blockConversation(it, true) }
+        }
+    }
+
     fun markAllRead() {
         viewModelScope.launch { repository.markAllAsRead() }
     }

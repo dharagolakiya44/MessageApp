@@ -32,13 +32,18 @@ class MainActivity : BaseActivity() {
     private val viewModel: HomeViewModel by viewModels { HomeViewModel.Factory(repository) }
 
     private val conversationAdapter by lazy {
-        ConversationAdapter(onConversationClick = { conversation ->
-            val intent = Intent(this, ConversationActivity::class.java).apply {
-                putExtra("conversationId", conversation.id)
-                putExtra("contactName", conversation.contact.name)
+        ConversationAdapter(
+            onConversationClick = { conversation ->
+                val intent = Intent(this, ConversationActivity::class.java).apply {
+                    putExtra("conversationId", conversation.id)
+                    putExtra("contactName", conversation.contact.name)
+                }
+                startActivity(intent)
+            },
+            onSelectionChanged = { count ->
+                updateSelectionUi(count)
             }
-            startActivity(intent)
-        })
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +53,13 @@ class MainActivity : BaseActivity() {
         setupDrawer()
         setupToolbar()
         setupHomeUi()
+        setupBottomActions()
+        
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handleBackPress()
+            }
+        })
     }
 
     private fun setupToolbar() {
@@ -64,7 +76,9 @@ class MainActivity : BaseActivity() {
             }
 
             ivBack.setOnClickListener {
-                if (etSearch.isVisible) {
+                if (conversationAdapter.selectionMode) {
+                    conversationAdapter.clearSelection()
+                } else if (etSearch.isVisible) {
                     etSearch.isVisible = false
                     etSearch.text?.clear()
                     ivBack.isVisible = false
@@ -77,6 +91,91 @@ class MainActivity : BaseActivity() {
             }
 
             tvTitle.text=getString(R.string.messages)
+        }
+    }
+    
+    private fun setupBottomActions() {
+        binding.actionDelete.setOnClickListener {
+            val selected = conversationAdapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                viewModel.deleteConversations(selected)
+                conversationAdapter.clearSelection()
+            }
+        }
+
+        binding.actionArchive.setOnClickListener {
+            val selected = conversationAdapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                viewModel.archiveConversations(selected)
+                conversationAdapter.clearSelection()
+            }
+        }
+        
+        binding.actionBlock.setOnClickListener {
+            val selected = conversationAdapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                viewModel.blockConversations(selected)
+                conversationAdapter.clearSelection()
+            }
+        }
+        
+        binding.actionMore.setOnClickListener { view ->
+            showMoreMenu(view)
+        }
+    }
+
+    private fun showMoreMenu(view: android.view.View) {
+        val popup = androidx.appcompat.widget.PopupMenu(this, view)
+        popup.menu.add(0, 1, 0, getString(R.string.pin))
+        popup.menu.add(0, 2, 0, getString(R.string.mark_unread))
+        
+        popup.setOnMenuItemClickListener { item ->
+            val selected = conversationAdapter.getSelectedItems()
+            if (selected.isNotEmpty()) {
+                when (item.itemId) {
+                    1 -> viewModel.pinConversations(selected, true)
+                    2 -> viewModel.markAsUnread(selected)
+                }
+                conversationAdapter.clearSelection()
+            }
+            true
+        }
+        popup.show()
+    }
+    
+    private fun updateSelectionUi(count: Int) {
+        if (count > 0) {
+            binding.incToolbar.tvTitle.text = "$count Selected"
+            binding.incToolbar.ivBack.setImageResource(R.drawable.ic_close)
+            binding.incToolbar.ivBack.visibility = android.view.View.VISIBLE
+            binding.incToolbar.ivMenu.visibility = android.view.View.GONE
+            binding.incToolbar.ivSearch.visibility = android.view.View.GONE
+            
+            binding.layoutBottomActions.visibility = android.view.View.VISIBLE
+            binding.fabStartChat.visibility = android.view.View.GONE
+        } else {
+            binding.incToolbar.tvTitle.text = getString(R.string.messages)
+            binding.incToolbar.ivBack.setImageResource(R.drawable.ic_back)
+            if (!binding.incToolbar.etSearch.isVisible) {
+               binding.incToolbar.ivBack.visibility = android.view.View.GONE
+               binding.incToolbar.ivMenu.visibility = android.view.View.VISIBLE
+               binding.incToolbar.ivSearch.visibility = android.view.View.VISIBLE
+            }
+            
+            binding.layoutBottomActions.visibility = android.view.View.GONE
+            binding.fabStartChat.visibility = android.view.View.VISIBLE
+        }
+    }
+    
+    private fun handleBackPress() {
+        if (conversationAdapter.selectionMode) {
+            conversationAdapter.clearSelection()
+        } else if (binding.incToolbar.etSearch.isVisible) {
+             binding.incToolbar.ivBack.performClick()
+        } else if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            finish()
         }
     }
 
