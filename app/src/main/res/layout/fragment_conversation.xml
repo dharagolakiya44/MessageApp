@@ -90,6 +90,36 @@
 
     <!-- Bottom Input Area -->
     <LinearLayout
+        android:id="@+id/layout_schedule_banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/text_schedule_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_medium"
+            android:textColor="@color/primary"
+            android:textSize="14sp"
+            tools:text="Schedule at 25 Dec, 2025 03:37 PM" />
+
+        <ImageView
+            android:id="@+id/button_close_schedule"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Close"
+            app:srcCompat="@drawable/ic_close"
+            app:tint="@color/colorIconGrey" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="bottom"

@@ -35,9 +35,19 @@ class ContactSelectionActivity : BaseActivity() {
         }
     }
 
+    private var isScheduled = false
+    private var scheduledTimestamp: Long? = null
+
     private val adapter by lazy {
         ContactAdapter { contact ->
-            viewModel.startConversation(contact.id)
+            if (isScheduled) {
+                com.example.messageapp.ui.dialog.ScheduleBottomSheetFragment { timestamp ->
+                    scheduledTimestamp = timestamp
+                    viewModel.startConversation(contact.id)
+                }.show(supportFragmentManager, com.example.messageapp.ui.dialog.ScheduleBottomSheetFragment.TAG)
+            } else {
+                viewModel.startConversation(contact.id)
+            }
         }
     }
 
@@ -45,6 +55,8 @@ class ContactSelectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = FragmentContactSelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isScheduled = intent.getBooleanExtra("EXTRA_IS_SCHEDULED", false)
 
         setupToolbar()
 
@@ -70,6 +82,9 @@ class ContactSelectionActivity : BaseActivity() {
                         ConversationActivity::class.java
                     ).apply {
                         putExtra("conversationId", id)
+                        if (isScheduled && scheduledTimestamp != null) {
+                            putExtra("EXTRA_SCHEDULED_TIMESTAMP", scheduledTimestamp)
+                        }
                     }
                     startActivity(intent)
                     finish() // Close contact selection after starting chat

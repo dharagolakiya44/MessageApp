@@ -8,6 +8,7 @@ enum class MessageStatus {
     SENT,
     DELIVERED,
     READ,
-    FAILED
+    FAILED,
+    SCHEDULED
 }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.messageapp.domain.model.ChatMessage
 import com.example.messageapp.domain.model.Contact
 import com.example.messageapp.domain.model.Conversation
+import com.example.messageapp.data.local.entity.MessageEntity
 import kotlinx.coroutines.flow.Flow
 
 interface MessagingRepository {
@@ -13,8 +14,10 @@ interface MessagingRepository {
     fun observeConversation(conversationId: Long): Flow<Conversation?>
     fun observeMessages(conversationId: Long): Flow<List<ChatMessage>>
     fun observeContacts(): Flow<List<Contact>>
+    fun getScheduledMessages(): Flow<List<MessageEntity>>
 
     suspend fun sendMessage(conversationId: Long, content: String): ChatMessage
+    suspend fun scheduleMessage(conversationId: Long, content: String, timestamp: Long): ChatMessage
     suspend fun retryMessage(messageId: Long)
     suspend fun archiveConversation(conversationId: Long)
     suspend fun unarchiveConversation(conversationId: Long)

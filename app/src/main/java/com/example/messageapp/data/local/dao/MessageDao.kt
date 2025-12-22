@@ -31,5 +31,8 @@ interface MessageDao {
 
     @Query("SELECT COUNT(*) FROM messages WHERE conversationId = :conversationId AND status = :status")
     suspend fun countByStatus(conversationId: Long, status: MessageStatus): Int
+
+    @Query("SELECT * FROM messages WHERE status = 'SCHEDULED' ORDER BY scheduledTimestamp ASC")
+    fun observeScheduledMessages(): Flow<List<MessageEntity>>
 }
 

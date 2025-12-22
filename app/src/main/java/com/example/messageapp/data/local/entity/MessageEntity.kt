@@ -12,6 +12,7 @@ data class MessageEntity(
     val content: String,
     val timestamp: Long,
     val status: MessageStatus,
-    val isOutgoing: Boolean
+    val isOutgoing: Boolean,
+    val scheduledTimestamp: Long? = null
 )
 

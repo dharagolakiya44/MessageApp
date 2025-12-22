@@ -33,15 +33,20 @@ class ConversationActivity : BaseActivity() {
 
     private val adapter by lazy { ChatMessageAdapter { id -> viewModel.retry(id) } }
 
+    private val scheduledTimestamp: Long by lazy { intent.getLongExtra("EXTRA_SCHEDULED_TIMESTAMP", 0L) }
+
+    // ...
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentConversationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         
-        // Hide system action bar if present, since we use custom toolbar layout
+        // Hide system action bar if present
         supportActionBar?.hide()
 
         setupCustomToolbar()
+        setupScheduleBanner()
 
         binding.recyclerMessages.apply {
             adapter = this@ConversationActivity.adapter
@@ -49,9 +54,15 @@ class ConversationActivity : BaseActivity() {
         }
 
         binding.buttonSend.setOnClickListener {
-            viewModel.sendMessage(binding.inputMessage.text.toString())
+            if (binding.layoutScheduleBanner.isVisible) {
+                viewModel.scheduleMessage(binding.inputMessage.text.toString(), scheduledTimestamp)
+                finish() // Close conversation after scheduling
+            } else {
+                viewModel.sendMessage(binding.inputMessage.text.toString())
+            }
             binding.inputMessage.text?.clear()
         }
+        
         
         binding.buttonAdd?.setOnClickListener {
              // Placeholder for future functionality
@@ -87,6 +98,20 @@ class ConversationActivity : BaseActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setupScheduleBanner() {
+        if (scheduledTimestamp > 0) {
+            binding.layoutScheduleBanner.isVisible = true
+            val date = java.text.SimpleDateFormat("dd MMM, yyyy hh:mm a", java.util.Locale.getDefault()).format(java.util.Date(scheduledTimestamp))
+            binding.textScheduleInfo.text = "Schedule at $date"
+            
+            binding.buttonCloseSchedule.setOnClickListener {
+                binding.layoutScheduleBanner.isVisible = false
+            }
+        } else {
+            binding.layoutScheduleBanner.isVisible = false
         }
     }
 

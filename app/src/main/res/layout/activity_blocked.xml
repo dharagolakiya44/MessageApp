@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/inc_toolbar"
+        layout="@layout/include_main_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_blocked"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/_80sdp"
+        app:layout_constraintBottom_toTopOf="@+id/layout_bottom_actions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inc_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/layout_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inc_toolbar">
+
+        <ImageView
+            android:layout_width="@dimen/_120sdp"
+            android:layout_height="@dimen/_120sdp"
+            android:src="@drawable/ic_block"
+            app:tint="@color/gray_light" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/inter_medium"
+            android:text="No blocked conversations"
+            android:textColor="@color/gray_text"
+            android:textSize="@dimen/_14ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FAFAFA"
+        android:paddingVertical="@dimen/_8sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/action_unblock"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Unblock"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_12ssp"
+            android:padding="@dimen/_8sdp"
+            app:drawableTopCompat="@drawable/ic_check_circle_blue" />
+
+        <TextView
+            android:id="@+id/action_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:padding="@dimen/_8sdp"
+            app:drawableTopCompat="@drawable/ic_delete" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -59,6 +59,15 @@ class ConversationViewModel(
         }
     }
 
+    fun scheduleMessage(content: String, timestamp: Long) {
+        if (content.isBlank()) return
+        _inputEnabled.value = false
+        viewModelScope.launch {
+            repository.scheduleMessage(conversationId, content.trim(), timestamp)
+            _inputEnabled.value = true
+        }
+    }
+
     fun retry(messageId: Long) {
         viewModelScope.launch { repository.retryMessage(messageId) }
     }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_16sdp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:fontFamily="@font/inter_semi_bold"
+        android:gravity="center"
+        android:text="Schedule"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_16ssp" />
+
+    <LinearLayout
+        android:id="@+id/option_later_today"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_schedule"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Later today, 5:00 PM"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_13ssp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/option_later_tonight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_schedule"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Later tonight, 9:00 PM"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_13ssp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/option_tomorrow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_schedule"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Tomorrow, 8:00 AM"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_13ssp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/option_pick_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_schedule"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Pick date and time"
+            android:textColor="@color/primary"
+            android:textSize="@dimen/_13ssp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="@dimen/_8sdp"
+        android:background="@color/gray_light"
+        android:alpha="0.2"/>
+
+    <TextView
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingVertical="@dimen/_8sdp"
+        android:text="Cancel"
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/_13ssp"
+        android:background="?selectableItemBackground"/>
+
+</LinearLayout>

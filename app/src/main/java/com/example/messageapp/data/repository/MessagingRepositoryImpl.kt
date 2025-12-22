@@ -77,6 +77,9 @@ class MessagingRepositoryImpl(
     override fun observeContacts(): Flow<List<Contact>> =
         contactDao.observeContacts().map { list -> list.map { it.toDomain() } }
 
+    override fun getScheduledMessages(): Flow<List<MessageEntity>> =
+        messageDao.observeScheduledMessages()
+
     override suspend fun sendMessage(conversationId: Long, content: String): ChatMessage =
         withContext(ioDispatcher) {
             val timestamp = System.currentTimeMillis()
@@ -102,6 +105,38 @@ class MessagingRepositoryImpl(
             val inserted = messageEntity.copy(id = id)
             sendSmsReal(inserted)
             inserted.toDomain()
+        }
+
+    override suspend fun scheduleMessage(conversationId: Long, content: String, timestamp: Long): ChatMessage =
+        withContext(ioDispatcher) {
+            val messageEntity = MessageEntity(
+                conversationId = conversationId,
+                senderId = SELF_USER_ID,
+                content = content,
+                timestamp = System.currentTimeMillis(), // Creation time
+                status = MessageStatus.SCHEDULED,
+                isOutgoing = true,
+                scheduledTimestamp = timestamp
+            )
+            val id = messageDao.insert(messageEntity)
+
+            val delay = timestamp - System.currentTimeMillis()
+            if (delay > 0) {
+                 val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.example.messageapp.worker.ScheduleMessageWorker>()
+                    .setInitialDelay(delay, java.util.concurrent.TimeUnit.MILLISECONDS)
+                    .setInputData(androidx.work.workDataOf("messageId" to id))
+                    .build()
+                 androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
+            } else {
+                // If time passed, send immediately? Or fail? 
+                // Let's just queue it with 0 delay or relying on Worker to handle it.
+                 val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.example.messageapp.worker.ScheduleMessageWorker>()
+                    .setInputData(androidx.work.workDataOf("messageId" to id))
+                    .build()
+                 androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
+            }
+
+            messageEntity.copy(id = id).toDomain()
         }
 
     override suspend fun retryMessage(messageId: Long) = withContext(ioDispatcher) {

@@ -5,7 +5,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.messageapp.R
-import com.example.messageapp.databinding.FragmentPlaceholderBinding
+import com.example.messageapp.databinding.ActivityBlockedBinding
 import com.example.messageapp.ui.adapters.ConversationAdapter
 import com.example.messageapp.ui.common.BaseActivity
 import com.example.messageapp.viewmodels.BlockedViewModel
@@ -14,23 +14,15 @@ import kotlinx.coroutines.launch
 
 class BlockedActivity : BaseActivity() {
 
-    private lateinit var binding: FragmentPlaceholderBinding
+    private lateinit var binding: ActivityBlockedBinding
     private val viewModel: BlockedViewModel by viewModels {
         BlockedViewModel.Factory((application as com.example.messageapp.Controller).repository)
     }
-
+    
     private val adapter: ConversationAdapter by lazy {
         ConversationAdapter(
             onConversationClick = { conversation ->
                  // Typically blocked users can't be chatted with until unblocked.
-                 // We can either show a snackbar or just toggle selection if in selection mode.
-                 if (adapter.selectionMode) {
-                     // Already handled by adapter's internal click listener if we set it up right, 
-                     // but adapter's default click listener is for navigation.
-                     // The adapter handles long press for selection. 
-                     // If we want normal click to also select during selection mode, adapter usually handles it.
-                     // Here we just want to ensure we don't navigate.
-                 }
             },
             onSelectionChanged = { count ->
                 updateSelectionUi(count)
@@ -40,7 +32,7 @@ class BlockedActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = FragmentPlaceholderBinding.inflate(layoutInflater)
+        binding = ActivityBlockedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // supportActionBar?.title = "Blocked" // Removed

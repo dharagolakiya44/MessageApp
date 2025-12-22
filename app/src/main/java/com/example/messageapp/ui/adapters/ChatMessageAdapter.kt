@@ -60,12 +60,26 @@ class ChatMessageAdapter(
                     MessageStatus.DELIVERED -> "Delivered"
                     MessageStatus.READ -> "Read"
                     MessageStatus.FAILED -> "Failed"
+                    MessageStatus.SCHEDULED -> "Scheduled"
                 }
                 
-                iconRetry.isVisible = item.status == MessageStatus.FAILED
-                iconRetry.setOnClickListener { onRetry(item.id) }
+                if (item.status == MessageStatus.FAILED) {
+                     iconRetry.setImageResource(R.drawable.ic_error) // Using existing error icon
+                     iconRetry.isVisible = true
+                } else if (item.status == MessageStatus.SCHEDULED) {
+                     iconRetry.setImageResource(R.drawable.ic_schedule) 
+                     iconRetry.isVisible = true
+                } else {
+                     iconRetry.isVisible = false
+                }
+                
+                iconRetry.setOnClickListener { 
+                    if (item.status == MessageStatus.FAILED) onRetry(item.id)
+                }
                 
                 textStatus.isVisible = item.isOutgoing
+                // Adjust textStatus color/text if needed for Scheduled? 
+                // Currently it shows "Scheduled" text which is fine.
 
                 if (item.isOutgoing) {
                     bubbleContainer.apply {
