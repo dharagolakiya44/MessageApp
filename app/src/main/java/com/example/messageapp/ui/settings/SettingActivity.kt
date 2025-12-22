@@ -9,6 +9,7 @@ import com.example.messageapp.R
 import com.example.messageapp.databinding.ActivitySettingBinding
 import com.example.messageapp.extention.viewBinding
 import com.example.messageapp.ui.common.BaseActivity
+import com.example.messageapp.ui.swipeAction.ChangeSwipeActionActivity
 import com.example.messageapp.ui.theme.SelectThemeModeActivity
 import kotlin.jvm.java
 
@@ -50,7 +51,8 @@ class SettingActivity : BaseActivity() {
         }
 
         binding.llSwipe.setOnClickListener {
-
+            val intent = Intent(this, ChangeSwipeActionActivity::class.java)
+            startActivity(intent)
         }
 
         binding.llFontSize.setOnClickListener {

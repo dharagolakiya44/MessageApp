@@ -51,5 +51,15 @@
     <string name="day_mode">Day Mode</string>
     <string name="night_mode">Night Mode</string>
     <string name="add">Add</string>
+    <string name="right_swipe">Right Swipe</string>
+    <string name="left_swipe">Left Swipe</string>
+    <string name="change">Change</string>
+    <string name="change_action">Change action</string>
+    <string name="mark_as_read">Mark as read</string>
+    <string name="mark_as_unread">Mark as unread</string>
+    <string name="delete">Delete</string>
+    <string name="archive">Archive</string>
+    <string name="block">Block</string>
+    <string name="none">None</string>
 
 </resources>

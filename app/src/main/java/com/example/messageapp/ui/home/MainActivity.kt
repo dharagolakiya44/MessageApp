@@ -21,6 +21,7 @@ import com.example.messageapp.ui.common.SwipeToArchiveCallback
 import com.example.messageapp.ui.contacts.ContactSelectionActivity
 import com.example.messageapp.ui.conversation.ConversationActivity
 import com.example.messageapp.ui.scheduled.ScheduledActivity
+import com.example.messageapp.ui.settings.SettingActivity
 import com.example.messageapp.viewmodels.HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -92,7 +93,7 @@ class MainActivity : BaseActivity() {
                 R.id.scheduledFragment -> startActivity(Intent(this, ScheduledActivity::class.java))
                 R.id.blockedFragment -> startActivity(Intent(this, BlockedActivity::class.java))
                 R.id.menu_mark_read -> viewModel.markAllRead()
-                // Settings is ignored as requested
+                R.id.settingsFragment -> startActivity(Intent(this, SettingActivity::class.java))
             }
             true // Close drawer on selection
         }

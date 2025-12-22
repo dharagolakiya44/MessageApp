@@ -19,7 +19,7 @@
 
     <!--  Icon colors-->
     <color name="colorIconBlack">#1A1A1A</color>
-    <color name="colorIconGrey">#808080</color>
+    <color name="colorIconGrey">#CCCCCC</color>
 
     <color name="colorIconBg">#EBF5FF</color>
     <color name="colorBgSearch">#F2F2F2</color>

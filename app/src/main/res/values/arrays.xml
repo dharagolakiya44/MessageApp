@@ -49,5 +49,22 @@
         <item>mute</item>
         <item>none</item>
     </string-array>
+
+    <string-array name="swipe_action_options">
+        <item>None</item>
+        <item>Delete</item>
+        <item>Mark as read</item>
+        <item>Mark as unread</item>
+        <item>Archive</item>
+        <item>Block</item>
+    </string-array>
+    <string-array name="swipe_action_values">
+        <item>none</item>
+        <item>delete</item>
+        <item>mark_read</item>
+        <item>mark_unread</item>
+        <item>archive</item>
+        <item>block</item>
+    </string-array>
 </resources>
 
