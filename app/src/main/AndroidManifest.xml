@@ -16,9 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MessageApp">
         <activity
-            android:name=".ui.swipeAction.ChangeSwipeActionActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -47,6 +44,12 @@
             android:exported="false" />
         <activity
             android:name=".ui.conversation.ConversationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.fontSize.ChangeFontSizeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.swipeAction.ChangeSwipeActionActivity"
             android:exported="false" />
     </application>
 
