@@ -124,7 +124,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context) {
         val lang = PreferenceHelper.getLanguageCode(context = newBase)
-        super.attachBaseContext(LocaleHelper.setLocale(newBase, lang))
+        val localizedContext = LocaleHelper.setLocale(newBase, lang)
+        val fontScaledContext = com.example.messageapp.utils.FontSizeHelper.applyFontScale(localizedContext)
+        super.attachBaseContext(fontScaledContext)
     }
 
     fun openPrivacyPolicy() {

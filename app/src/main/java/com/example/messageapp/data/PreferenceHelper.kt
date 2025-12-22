@@ -8,6 +8,7 @@ object PreferenceHelper {
     private const val PREF_NAME = "message_prefs"
     private const val LANGUAGE_CODE = "language_code"
     private const val KEY_THEME_MODE = "theme_mode"
+    private const val KEY_FONT_SIZE = "font_size"
 
     private fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
@@ -30,5 +31,15 @@ object PreferenceHelper {
     fun getThemeMode(context: Context): Int {
         val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
         return prefs.getInt(KEY_THEME_MODE, THEME_SYSTEM) // default: system
+    }
+
+    fun setFontSize(context: Context, fontSize: String) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putString(KEY_FONT_SIZE, fontSize).apply()
+    }
+
+    fun getFontSize(context: Context): String {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_FONT_SIZE, "normal") ?: "normal"
     }
 }

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBgMain"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/incToolbar"
+        layout="@layout/include_main_toolbar" />
+
+    <View style="@style/HorizontalLineStyle" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Small -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/_5sdp">
+
+            <FrameLayout
+                android:id="@+id/llSmall"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <View
+                    android:id="@+id/viewSmallSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_font_size_card_selector" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:minHeight="@dimen/_80sdp"
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/TextViewStyleTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aa"
+                        android:textSize="@dimen/_22sdp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorTextBlack" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/small"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_14ssp" />
+
+        </LinearLayout>
+
+        <!-- Normal -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/_5sdp">
+
+            <FrameLayout
+                android:id="@+id/llNormal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <View
+                    android:id="@+id/viewNormalSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_font_size_card_selector" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    android:layout_gravity="center"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:minHeight="@dimen/_80sdp"
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/TextViewStyleTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aa"
+                        android:textSize="@dimen/_28sdp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorTextBlack" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/normal"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_14ssp" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:weightSum="2">
+
+        <!-- Large -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_marginEnd="@dimen/_5sdp">
+
+            <FrameLayout
+                android:id="@+id/llLarge"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <View
+                    android:id="@+id/viewLargeSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_font_size_card_selector" />
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:minHeight="@dimen/_80sdp"
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/TextViewStyleTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aa"
+                        android:textSize="@dimen/_32sdp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorTextBlack" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/large"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_14ssp" />
+
+        </LinearLayout>
+
+        <!-- Extra Large -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/_5sdp">
+
+            <FrameLayout
+                android:id="@+id/llExtraLarge"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_marginHorizontal="@dimen/_5sdp">
+
+                <View
+                    android:id="@+id/viewExtraLargeSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_font_size_card_selector" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="0dp"
+                    android:layout_gravity="center"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:minHeight="@dimen/_80sdp"
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/TextViewStyleTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aa"
+                        android:textSize="@dimen/_36sdp"
+                        android:layout_gravity="center"
+                        android:textColor="@color/colorTextBlack" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </FrameLayout>
+
+            <TextView
+                style="@style/TextViewStyleTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/extra_large"
+                android:textColor="@color/colorTextBlack"
+                android:textSize="@dimen/_14ssp" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
