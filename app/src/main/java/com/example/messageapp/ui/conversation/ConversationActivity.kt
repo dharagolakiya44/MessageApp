@@ -56,7 +56,6 @@ class ConversationActivity : BaseActivity() {
         binding.buttonSend.setOnClickListener {
             if (binding.layoutScheduleBanner.isVisible) {
                 viewModel.scheduleMessage(binding.inputMessage.text.toString(), scheduledTimestamp)
-                finish() // Close conversation after scheduling
             } else {
                 viewModel.sendMessage(binding.inputMessage.text.toString())
             }

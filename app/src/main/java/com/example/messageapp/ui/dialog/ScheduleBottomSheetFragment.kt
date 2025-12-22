@@ -36,12 +36,10 @@ class ScheduleBottomSheetFragment(
             calendar.set(Calendar.HOUR_OF_DAY, 17) // 5 PM
             calendar.set(Calendar.MINUTE, 0)
             calendar.set(Calendar.SECOND, 0)
-            if (calendar.timeInMillis < System.currentTimeMillis()) {
-                // If already past 5 PM, maybe schedule for tomorrow? 
-                // Or just let it be past (which usually means immediate or error). 
-                // For simplicity, let's keep it as is, or move to next day if requested.
-                // But usually "Later today" implies today. If it's 6 PM, this option might be disabled or hidden in real app.
-                // I'll leave it as is for now.
+            // Ensure the selected time is always in the future.
+            // If 5 PM today already passed, schedule for tomorrow 5 PM.
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_YEAR, 1)
             }
             onTimeSelected(calendar.timeInMillis)
             dismiss()
