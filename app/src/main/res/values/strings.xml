@@ -62,10 +62,7 @@
     <string name="block">Block</string>
     <string name="none">None</string>
 
-    <string name="delete">Delete</string>
     <string name="unarchive">Unarchive</string>
-    <string name="block">Block</string>
-    <string name="archive">Archive</string>
     <string name="more">More</string>
     <string name="pin">Pin</string>
     <string name="unpin">Unpin</string>
