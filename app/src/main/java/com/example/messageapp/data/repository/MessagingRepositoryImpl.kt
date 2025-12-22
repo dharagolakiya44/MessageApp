@@ -53,6 +53,15 @@ class MessagingRepositoryImpl(
             }.filter { it.lastMessage.isNotBlank() }
         }
 
+    override fun observeBlockedConversations(): Flow<List<Conversation>> =
+        combine(conversationDao.observeBlocked(), contactDao.observeContacts()) { conversations, contacts ->
+            conversations.map { conversation ->
+                val contact = contacts.firstOrNull { it.id == conversation.contactId }?.toDomain()
+                    ?: Contact(conversation.contactId, conversation.contactName, conversation.contactPhone, conversation.contactOnline)
+                conversation.toDomain(contact)
+            }.filter { it.lastMessage.isNotBlank() }
+        }
+
     override fun observeConversation(conversationId: Long): Flow<Conversation?> =
         combine(conversationDao.observeById(conversationId), contactDao.observeContacts()) { conversation, contacts ->
             conversation?.let {
@@ -121,14 +130,52 @@ class MessagingRepositoryImpl(
                     return@launch
                 }
 
+                val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as? android.telephony.TelephonyManager
+                if (telephonyManager != null && telephonyManager.simState == android.telephony.TelephonyManager.SIM_STATE_ABSENT) {
+                    markMessageFailed(message.id, message.conversationId)
+                    return@launch
+                }
+
                 val smsManager = context.getSystemService(android.telephony.SmsManager::class.java) 
                     ?: android.telephony.SmsManager.getDefault()
 
-                smsManager.sendTextMessage(phone, null, message.content, null, null)
-                
-                // If no exception, mark as SENT (Basic implementation)
-                // Ideal implementation would use PendingIntent for delivery reports
-                updateMessageStatus(message.id, message.conversationId, MessageStatus.SENT)
+                val SENT_ACTION = "SMS_SENT_${message.id}"
+                val sentIntent = android.app.PendingIntent.getBroadcast(
+                    context,
+                    message.id.toInt(),
+                    android.content.Intent(SENT_ACTION),
+                    android.app.PendingIntent.FLAG_ONE_SHOT or android.app.PendingIntent.FLAG_IMMUTABLE
+                )
+
+                val receiver = object : android.content.BroadcastReceiver() {
+                    override fun onReceive(c: Context?, intent: android.content.Intent?) {
+                        when (resultCode) {
+                            android.app.Activity.RESULT_OK -> {
+                                backgroundScope.launch {
+                                    updateMessageStatus(message.id, message.conversationId, MessageStatus.SENT)
+                                }
+                            }
+                            else -> {
+                                backgroundScope.launch {
+                                    markMessageFailed(message.id, message.conversationId)
+                                }
+                            }
+                        }
+                        try {
+                            context.unregisterReceiver(this)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(receiver, android.content.IntentFilter(SENT_ACTION), Context.RECEIVER_EXPORTED)
+                } else {
+                    context.registerReceiver(receiver, android.content.IntentFilter(SENT_ACTION))
+                }
+
+                smsManager.sendTextMessage(phone, null, message.content, sentIntent, null)
                 
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -165,6 +212,10 @@ class MessagingRepositoryImpl(
         conversationDao.unarchive(conversationId)
     }
 
+    override suspend fun deleteConversation(conversationId: Long) = withContext(ioDispatcher) {
+        conversationDao.deleteById(conversationId)
+    }
+
     override suspend fun markAllAsRead() = withContext(ioDispatcher) {
         conversationDao.markAllRead()
     }
@@ -191,7 +242,9 @@ class MessagingRepositoryImpl(
             unreadCount = 0,
             archived = false,
             lastStatus = MessageStatus.SENT,
-            hasFailedMessage = false
+            hasFailedMessage = false,
+            pinned = false,
+            blocked = false
         )
         conversationDao.upsert(conversation)
         newId
@@ -240,6 +293,18 @@ class MessagingRepositoryImpl(
     }
 
 
+
+    override suspend fun markConversationUnread(conversationId: Long) = withContext(ioDispatcher) {
+        conversationDao.markUnread(conversationId)
+    }
+
+    override suspend fun pinConversation(conversationId: Long, isPinned: Boolean) = withContext(ioDispatcher) {
+        conversationDao.updatePinned(conversationId, isPinned)
+    }
+
+    override suspend fun blockConversation(conversationId: Long, isBlocked: Boolean) = withContext(ioDispatcher) {
+        conversationDao.updateBlocked(conversationId, isBlocked)
+    }
 
     companion object {
         private const val SELF_USER_ID = 0L

@@ -8,6 +8,8 @@ data class Conversation(
     val unreadCount: Int,
     val isArchived: Boolean,
     val lastStatus: MessageStatus,
-    val hasFailedMessage: Boolean
+    val hasFailedMessage: Boolean,
+    val isPinned: Boolean,
+    val isBlocked: Boolean
 )
 

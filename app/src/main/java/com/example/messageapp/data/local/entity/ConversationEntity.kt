@@ -16,6 +16,8 @@ data class ConversationEntity(
     val unreadCount: Int,
     val archived: Boolean,
     val lastStatus: MessageStatus,
-    val hasFailedMessage: Boolean
+    val hasFailedMessage: Boolean,
+    val pinned: Boolean = false,
+    val blocked: Boolean = false
 )
 

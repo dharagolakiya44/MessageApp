@@ -79,6 +79,15 @@ class ChatMessageAdapter(
                     bubbleText.setTextColor(root.context.getColor(R.color.colorWhiteCommon))
                     textTime.setTextColor(root.context.getColor(R.color.colorWhiteCommon))
                     textStatus.setTextColor(root.context.getColor(R.color.colorTextHint)) // Kept hint color for subtlety or change to white if needed
+                    
+                    // Icon to the LEFT of bubble for outgoing
+                    val iconParams = iconRetry.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                    iconParams.startToEnd = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+                    iconParams.endToStart = bubbleCard.id
+                    iconParams.rightMargin = 8 // Add some margin
+                    iconParams.leftMargin = 0
+                    iconRetry.layoutParams = iconParams
+
                 } else {
                     bubbleContainer.apply {
                          val params = bubbleCard.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
@@ -88,6 +97,14 @@ class ChatMessageAdapter(
                     bubbleCard.setCardBackgroundColor(root.context.getColor(android.R.color.white))
                     bubbleText.setTextColor(root.context.getColor(R.color.colorTextBlack))
                     textTime.setTextColor(root.context.getColor(R.color.colorTextBlack))
+                    
+                    // Icon to the RIGHT of bubble for incoming
+                    val iconParams = iconRetry.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                    iconParams.endToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+                    iconParams.startToEnd = bubbleCard.id
+                    iconParams.leftMargin = 8 // Add some margin
+                    iconParams.rightMargin = 0
+                    iconRetry.layoutParams = iconParams
                 }
             }
         }

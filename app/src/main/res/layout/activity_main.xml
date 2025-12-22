@@ -41,6 +41,64 @@
             app:srcCompat="@drawable/ic_chat"
             app:tint="@android:color/white" />
 
+        <LinearLayout
+            android:id="@+id/layout_bottom_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            android:background="?android:attr/windowBackground"
+            android:elevation="16dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/action_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_delete"
+                android:gravity="center"
+                android:text="@string/delete"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableTint="?attr/colorControlNormal" />
+
+            <TextView
+                android:id="@+id/action_block"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_block"
+                android:gravity="center"
+                android:text="@string/block"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableTint="?attr/colorControlNormal" />
+
+            <TextView
+                android:id="@+id/action_archive"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_archive"
+                android:gravity="center"
+                android:text="@string/archive"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableTint="?attr/colorControlNormal" />
+
+            <TextView
+                android:id="@+id/action_more"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_more_vert"
+                android:gravity="center"
+                android:text="@string/more"
+                android:textColor="?attr/colorControlNormal"
+                app:drawableTint="?attr/colorControlNormal" />
+
+        </LinearLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -54,11 +54,10 @@
         android:layout_height="16dp"
         android:layout_marginStart="4dp"
         android:contentDescription="@string/message_failed"
-        android:src="@drawable/ic_error"
+        android:src="@drawable/ic_failed_message"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/bubble_card"
         app:layout_constraintStart_toEndOf="@+id/bubble_card"
-        app:tint="#D32F2F"
         tools:visibility="visible" />
 
     <TextView
