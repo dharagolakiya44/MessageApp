@@ -34,5 +34,8 @@ interface MessageDao {
 
     @Query("SELECT * FROM messages WHERE status = 'SCHEDULED' ORDER BY scheduledTimestamp ASC")
     fun observeScheduledMessages(): Flow<List<MessageEntity>>
+
+    @Query("DELETE FROM messages WHERE id = :messageId")
+    suspend fun deleteMessage(messageId: Long)
 }
 

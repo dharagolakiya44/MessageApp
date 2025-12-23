@@ -15,7 +15,8 @@ import com.example.messageapp.ui.conversation.ChatUiModel
 import com.example.messageapp.utils.formatMessageTime
 
 class ChatMessageAdapter(
-    private val onRetry: (Long) -> Unit
+    private val onFailedMessageClick: (Long, String) -> Unit,
+    private val onScheduledMessageClick: (Long, String) -> Unit
 ) : ListAdapter<ChatUiModel, RecyclerView.ViewHolder>(Diff) {
 
     override fun getItemViewType(position: Int): Int {
@@ -74,7 +75,11 @@ class ChatMessageAdapter(
                 }
                 
                 iconRetry.setOnClickListener { 
-                    if (item.status == MessageStatus.FAILED) onRetry(item.id)
+                    when (item.status) {
+                        MessageStatus.FAILED -> onFailedMessageClick(item.id, item.content)
+                        MessageStatus.SCHEDULED -> onScheduledMessageClick(item.id, item.content)
+                        else -> { /* Do nothing */ }
+                    }
                 }
                 
                 textStatus.isVisible = item.isOutgoing

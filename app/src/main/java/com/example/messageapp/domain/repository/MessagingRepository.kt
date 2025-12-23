@@ -19,6 +19,9 @@ interface MessagingRepository {
     suspend fun sendMessage(conversationId: Long, content: String): ChatMessage
     suspend fun scheduleMessage(conversationId: Long, content: String, timestamp: Long): ChatMessage
     suspend fun retryMessage(messageId: Long)
+    suspend fun deleteMessage(messageId: Long)
+    suspend fun sendScheduledMessageNow(messageId: Long)
+    suspend fun rescheduleMessage(messageId: Long, newTimestamp: Long)
     suspend fun archiveConversation(conversationId: Long)
     suspend fun unarchiveConversation(conversationId: Long)
     suspend fun deleteConversation(conversationId: Long)

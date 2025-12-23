@@ -72,6 +72,18 @@ class ConversationViewModel(
         viewModelScope.launch { repository.retryMessage(messageId) }
     }
 
+    fun deleteMessage(messageId: Long) {
+        viewModelScope.launch { repository.deleteMessage(messageId) }
+    }
+
+    fun sendScheduledMessageNow(messageId: Long) {
+        viewModelScope.launch { repository.sendScheduledMessageNow(messageId) }
+    }
+
+    fun rescheduleMessage(messageId: Long, newTimestamp: Long) {
+        viewModelScope.launch { repository.rescheduleMessage(messageId, newTimestamp) }
+    }
+
     class Factory(
         private val conversationId: Long,
         private val repository: MessagingRepository

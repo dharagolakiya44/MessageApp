@@ -125,15 +125,14 @@ class MessagingRepositoryImpl(
                  val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.example.messageapp.worker.ScheduleMessageWorker>()
                     .setInitialDelay(delay, java.util.concurrent.TimeUnit.MILLISECONDS)
                     .setInputData(androidx.work.workDataOf("messageId" to id))
+                    .addTag("schedule_message_$id")
                     .build()
                  androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
             } else {
-                // If time passed, send immediately? Or fail? 
-                // Let's just queue it with 0 delay or relying on Worker to handle it.
-                 val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.example.messageapp.worker.ScheduleMessageWorker>()
-                    .setInputData(androidx.work.workDataOf("messageId" to id))
-                    .build()
-                 androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
+                // If time passed, send immediately
+                val sending = messageEntity.copy(id = id, status = MessageStatus.SENDING)
+                messageDao.update(sending)
+                sendSmsReal(sending)
             }
 
             messageEntity.copy(id = id).toDomain()
@@ -151,6 +150,57 @@ class MessagingRepositoryImpl(
             hasFailed = false
         )
         sendSmsReal(retrying)
+    }
+
+    override suspend fun deleteMessage(messageId: Long) = withContext(ioDispatcher) {
+        messageDao.deleteMessage(messageId)
+    }
+
+    override suspend fun sendScheduledMessageNow(messageId: Long) = withContext(ioDispatcher) {
+        val message = messageDao.getMessage(messageId) ?: return@withContext
+        if (message.status == MessageStatus.SCHEDULED) {
+            // Cancel existing work by tag
+            androidx.work.WorkManager.getInstance(context).cancelAllWorkByTag("schedule_message_$messageId")
+            
+            val sending = message.copy(status = MessageStatus.SENDING)
+            messageDao.update(sending)
+            conversationDao.updateSnapshot(
+                conversationId = message.conversationId,
+                lastMessage = message.content,
+                timestamp = System.currentTimeMillis(),
+                status = MessageStatus.SENDING,
+                hasFailed = false
+            )
+            sendSmsReal(sending)
+        }
+    }
+
+    override suspend fun rescheduleMessage(messageId: Long, newTimestamp: Long) = withContext(ioDispatcher) {
+        val message = messageDao.getMessage(messageId) ?: return@withContext
+        if (message.status == MessageStatus.SCHEDULED) {
+            // Cancel existing work by tag
+            androidx.work.WorkManager.getInstance(context).cancelAllWorkByTag("schedule_message_$messageId")
+            
+            // Update message with new scheduled timestamp
+            val rescheduled = message.copy(scheduledTimestamp = newTimestamp)
+            messageDao.update(rescheduled)
+            
+            // Schedule new work with the new timestamp
+            val delay = newTimestamp - System.currentTimeMillis()
+            if (delay > 0) {
+                val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.example.messageapp.worker.ScheduleMessageWorker>()
+                    .setInitialDelay(delay, java.util.concurrent.TimeUnit.MILLISECONDS)
+                    .setInputData(androidx.work.workDataOf("messageId" to messageId))
+                    .addTag("schedule_message_$messageId")
+                    .build()
+                androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
+            } else {
+                // If time passed, send immediately
+                val sending = rescheduled.copy(status = MessageStatus.SENDING)
+                messageDao.update(sending)
+                sendSmsReal(sending)
+            }
+        }
     }
 
     private fun sendSmsReal(message: MessageEntity) {
