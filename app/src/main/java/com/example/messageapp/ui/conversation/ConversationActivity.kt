@@ -15,6 +15,7 @@ import com.example.messageapp.R
 import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
 import com.example.messageapp.ui.common.BaseActivity
+import com.example.messageapp.ui.contactdetails.ContactDetailsActivity
 import com.example.messageapp.ui.dialog.FailedMessageDialogFragment
 import com.example.messageapp.ui.dialog.ScheduledMessageMenuDialogFragment
 import com.example.messageapp.utils.formatTimestamp
@@ -146,7 +147,18 @@ class ConversationActivity : BaseActivity() {
     }
 
     private fun showInfo() {
-        Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
+        val conversation = viewModel.conversation.value
+        if (conversation != null) {
+            val intent = Intent(this, ContactDetailsActivity::class.java).apply {
+                putExtra("conversationId", conversation.id)
+                putExtra("contactId", conversation.contact.id)
+                putExtra("contactName", conversation.contact.name)
+                putExtra("contactPhone", conversation.contact.phone)
+            }
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
