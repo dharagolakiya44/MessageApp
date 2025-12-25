@@ -49,6 +49,9 @@
             android:name=".ui.conversation.ConversationActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.contactdetails.ContactDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.fontSize.ChangeFontSizeActivity"
             android:exported="false" />
         <activity

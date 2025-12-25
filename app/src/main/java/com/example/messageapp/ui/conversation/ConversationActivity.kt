@@ -15,6 +15,9 @@ import com.example.messageapp.R
 import com.example.messageapp.ui.adapters.ChatMessageAdapter
 import com.example.messageapp.databinding.FragmentConversationBinding
 import com.example.messageapp.ui.common.BaseActivity
+import com.example.messageapp.ui.contactdetails.ContactDetailsActivity
+import com.example.messageapp.ui.dialog.FailedMessageDialogFragment
+import com.example.messageapp.ui.dialog.ScheduledMessageMenuDialogFragment
 import com.example.messageapp.utils.formatTimestamp
 import com.example.messageapp.viewmodels.ConversationViewModel
 import kotlinx.coroutines.launch
@@ -31,7 +34,12 @@ class ConversationActivity : BaseActivity() {
         ConversationViewModel.Factory(conversationId, repository)
     }
 
-    private val adapter by lazy { ChatMessageAdapter { id -> viewModel.retry(id) } }
+    private val adapter by lazy { 
+        ChatMessageAdapter(
+            onFailedMessageClick = { messageId, _ -> showFailedMessageDialog(messageId) },
+            onScheduledMessageClick = { messageId, content -> showScheduledMessageMenu(messageId, content) }
+        )
+    }
 
     private val scheduledTimestamp: Long by lazy { intent.getLongExtra("EXTRA_SCHEDULED_TIMESTAMP", 0L) }
 
@@ -139,11 +147,59 @@ class ConversationActivity : BaseActivity() {
     }
 
     private fun showInfo() {
-        Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
+        val conversation = viewModel.conversation.value
+        if (conversation != null) {
+            val intent = Intent(this, ContactDetailsActivity::class.java).apply {
+                putExtra("conversationId", conversation.id)
+                putExtra("contactId", conversation.contact.id)
+                putExtra("contactName", conversation.contact.name)
+                putExtra("contactPhone", conversation.contact.phone)
+            }
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, R.string.contact_details_coming_soon, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
+    }
+
+    private fun showFailedMessageDialog(messageId: Long) {
+        FailedMessageDialogFragment(
+            onRetry = {
+                viewModel.retry(messageId)
+            },
+            onCancel = {
+                // Dialog dismissed, do nothing
+            }
+        ).show(supportFragmentManager, FailedMessageDialogFragment.TAG)
+    }
+
+    private fun showScheduledMessageMenu(messageId: Long, content: String) {
+        ScheduledMessageMenuDialogFragment(
+            messageContent = content,
+            onSendNow = {
+                viewModel.sendScheduledMessageNow(messageId)
+            },
+            onCopyText = {
+                // Already handled in the fragment
+            },
+            onReschedule = {
+                // Show schedule bottom sheet to pick new time
+                com.example.messageapp.ui.dialog.ScheduleBottomSheetFragment { newTimestamp ->
+                    viewModel.rescheduleMessage(messageId, newTimestamp)
+                }.show(supportFragmentManager, com.example.messageapp.ui.dialog.ScheduleBottomSheetFragment.TAG)
+            },
+            onDelete = {
+                viewModel.deleteMessage(messageId)
+            },
+            onEdit = {
+                // Put message content in input field for editing
+                binding.inputMessage.setText(content)
+                binding.inputMessage.requestFocus()
+            }
+        ).show(supportFragmentManager, ScheduledMessageMenuDialogFragment.TAG)
     }
 }
