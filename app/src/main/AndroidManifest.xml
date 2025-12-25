@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MessageApp">
         <activity
+            android:name=".ui.afterCall.AfterCallActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
